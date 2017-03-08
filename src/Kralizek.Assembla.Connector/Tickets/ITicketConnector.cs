@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Assembla.Documents;
 using Assembla.Tags;
 using Assembla.Tickets.CustomFields;
+using Assembla.Tickets.CustomReports;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -23,7 +24,7 @@ namespace Assembla.Tickets
 
         Task<IReadOnlyList<Ticket>> GetByTagAsync(string spaceIdOrWikiName, int tagId, int? page = null, int? pageSize = null);
 
-        Task<IReadOnlyList<CustomReport>> GetSpaceCustomReportAsync(string spaceIdOrWikiName);
+        Task<IReadOnlyList<CustomReport>> GetAllCustomReportAsync(string spaceIdOrWikiName);
 
         Task<Ticket> GetByNumberAsync(string spaceIdOrWikiName, int ticketNumber);
 
@@ -70,14 +71,23 @@ namespace Assembla.Tickets
 
     public struct Report
     {
-        public int Id { get; }
+        public string Id { get; }
 
-        public Report(int id)
+        private Report(int id)
+        {
+            Id = id.ToString("D");
+        }
+
+        private Report(string id)
         {
             Id = id;
         }
 
-        public static implicit operator Report(int id) => new Report(id);
+        public static implicit operator Report(CustomReport customReport) => FromCustomReport(customReport);
+
+        public static Report FromCustomReport(CustomReport customReport) => new Report($"u{customReport.Id:D}");
+
+        public static Report FromCustomReportId(int customReportId) => new Report($"u{customReportId:D}");
 
         public static readonly Report AllActive = new Report(0);
         public static readonly Report ActiveByMilestone = new Report(1);

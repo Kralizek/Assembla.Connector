@@ -36,6 +36,7 @@ namespace Sample.Assembla.Connector
             services.AddTransient<ISample, TagsSample>();
             services.AddTransient<ISample, TicketSample>();
             services.AddTransient<ISample, TicketListSample>();
+            services.AddTransient<ISample, CustomFieldSample>();
 
             var serviceProvider = services.BuildServiceProvider();
 

@@ -19,7 +19,7 @@ namespace Assembla.Tickets.CustomFields
         public string Title { get; set; }
 
         [JsonProperty("order")]
-        public int Order { get; set; }
+        public int? Order { get; set; }
 
         [JsonProperty("required")]
         public bool IsRequired { get; set; }

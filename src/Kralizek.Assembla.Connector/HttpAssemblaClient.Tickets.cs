@@ -6,7 +6,7 @@ using Assembla.Documents;
 using Assembla.Tags;
 using Assembla.Tickets;
 using Assembla.Tickets.CustomFields;
-using Newtonsoft.Json;
+using Assembla.Tickets.CustomReports;
 
 namespace Assembla
 {
@@ -18,7 +18,7 @@ namespace Assembla
 
             if (report.HasValue)
             {
-                queryParameters.Add("report", report.Value.Id.ToString("D"));
+                queryParameters.Add("report", report.Value.Id);
             }
             if (page.HasValue)
             {
@@ -123,7 +123,7 @@ namespace Assembla
             return tickets;
         }
 
-        async Task<IReadOnlyList<CustomReport>> ITicketConnector.GetSpaceCustomReportAsync(string spaceIdOrWikiName)
+        async Task<IReadOnlyList<CustomReport>> ITicketConnector.GetAllCustomReportAsync(string spaceIdOrWikiName)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -135,8 +135,8 @@ namespace Assembla
             var reports = await _client.GetAsync<CustomReportList>(url).ConfigureAwait(false);
 
             var result = new List<CustomReport>();
-            result.AddRange(reports.TeamReports.Select(c => new CustomReport{Id = c.Id, Name = c.Name, ReportType = CustomReportType.TeamReport}));
-            result.AddRange(reports.UserReports.Select(c => new CustomReport { Id = c.Id, Name = c.Name, ReportType = CustomReportType.UserReport }));
+            result.AddRange(reports.TeamReports.Select(c => new CustomReport{Id = c.Id, Title = c.Title, ReportType = CustomReportType.TeamReport}));
+            result.AddRange(reports.UserReports.Select(c => new CustomReport { Id = c.Id, Title = c.Title, ReportType = CustomReportType.UserReport }));
 
             return result;
         }
@@ -280,36 +280,79 @@ namespace Assembla
     {
         async Task<IReadOnlyList<CustomField>> ICustomFieldConnector.GetAllAsync(string spaceIdOrWikiName)
         {
-            throw new NotImplementedException();
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var fields = await _client.GetAsync<CustomField[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields").ConfigureAwait(false);
+
+            return fields;
         }
 
         async Task<CustomField> ICustomFieldConnector.GetAsync(string spaceIdOrWikiName, string customFieldId)
         {
-            throw new NotImplementedException();
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (customFieldId == null)
+            {
+                throw new ArgumentNullException(nameof(customFieldId));
+            }
+            
+            var field = await _client.GetAsync<CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
+
+            return field;
         }
 
-        async Task<CustomField> ICustomFieldConnector.CreateAsync(string spaceIdOrWikiName, NewCustomField newCustomField)
+        async Task<CustomField> ICustomFieldConnector.CreateAsync(string spaceIdOrWikiName, CustomField customField)
         {
-            throw new NotImplementedException();
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (customField == null)
+            {
+                throw new ArgumentNullException(nameof(customField));
+            }
+
+            var createdField = await _client.PostAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
+
+            return createdField;
         }
 
         async Task ICustomFieldConnector.UpdateAsync(string spaceIdOrWikiName, CustomField customField)
         {
-            throw new NotImplementedException();
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (customField == null)
+            {
+                throw new ArgumentNullException(nameof(customField));
+            }
+            if (customField.Id == null)
+            {
+                throw new ArgumentNullException(nameof(customField.Id));
+            }
+
+            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customField.Id}", customField).ConfigureAwait(false);
         }
 
         async Task ICustomFieldConnector.DeleteAsync(string spaceIdOrWikiName, string customFieldId)
         {
-            throw new NotImplementedException();
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            if (customFieldId == null)
+            {
+                throw new ArgumentNullException(nameof(customFieldId));
+            }
+
+            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
         }
-    }
-
-    public class CustomReportList
-    {
-        [JsonProperty("team_reports")]
-        public IReadOnlyList<CustomReport> TeamReports { get; set; }
-
-        [JsonProperty("user_reports")]
-        public IReadOnlyList<CustomReport> UserReports { get; set; }
     }
 }
