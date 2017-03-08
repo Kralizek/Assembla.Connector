@@ -5,7 +5,7 @@ using Assembla.Tags;
 
 namespace Assembla
 {
-    public partial class HttpAssemblaConnector : ITagConnector
+    public partial class HttpAssemblaClient : ITagConnector
     {
         async Task<IReadOnlyList<Tag>> ITagConnector.GetAllAsync(string spaceIdOrWikiName)
         {

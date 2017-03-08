@@ -5,7 +5,7 @@ using Assembla.Spaces;
 
 namespace Assembla
 {
-    public partial class HttpAssemblaConnector : ISpaceConnector
+    public partial class HttpAssemblaClient : ISpaceConnector
     {
         async Task<IReadOnlyList<Space>> ISpaceConnector.GetAllAsync()
         {

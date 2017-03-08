@@ -10,6 +10,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+    <PackageReference Include="Kralizek.Extensions.Logging" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tickets\Associations\" />

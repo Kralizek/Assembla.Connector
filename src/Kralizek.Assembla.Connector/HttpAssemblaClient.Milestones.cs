@@ -5,7 +5,7 @@ using Assembla.Milestones;
 
 namespace Assembla
 {
-    public partial class HttpAssemblaConnector : IMilestoneConnector
+    public partial class HttpAssemblaClient : IMilestoneConnector
     {
         async Task<IReadOnlyList<Milestone>> IMilestoneConnector.GetAllAsync(string spaceIdOrWikiName, int? page, int? pageSize, SortOrder? sort)
         {

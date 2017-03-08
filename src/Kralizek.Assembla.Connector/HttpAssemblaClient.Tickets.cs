@@ -8,7 +8,7 @@ using Assembla.Tickets.CustomFields;
 
 namespace Assembla
 {
-    public partial class HttpAssemblaConnector : ITicketConnector
+    public partial class HttpAssemblaClient : ITicketConnector
     {
         async Task<IReadOnlyList<Ticket>> ITicketConnector.GetAsync(string spaceIdOrWikiName, Report? report, int? page, int? pageSize, TicketSortExpression? sortExpression, SortOrder? sort)
         {
@@ -83,7 +83,7 @@ namespace Assembla
         ICustomFieldConnector ITicketConnector.CustomFields => this;
     }
 
-    public partial class HttpAssemblaConnector : ICustomFieldConnector
+    public partial class HttpAssemblaClient : ICustomFieldConnector
     {
         async Task<IReadOnlyList<CustomField>> ICustomFieldConnector.GetAllAsync(string spaceIdOrWikiName)
         {

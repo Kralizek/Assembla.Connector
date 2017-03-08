@@ -5,7 +5,7 @@ using Assembla.Tickets;
 
 namespace Assembla
 {
-    public interface IAssemblaConnector
+    public interface IAssemblaClient
     {
         ISpaceConnector Spaces { get; }
 
