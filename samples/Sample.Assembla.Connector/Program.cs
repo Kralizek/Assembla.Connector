@@ -29,33 +29,7 @@ namespace Sample.Assembla.Connector
 
             IAssemblaClient client = new HttpAssemblaClient(httpClient, loggerFactory.CreateLogger<HttpAssemblaClient>());
 
-            //var tags = await client.Tags.GetAllAsync("studentum");
 
-            //foreach (var tag in tags)
-            //{
-            //    Console.WriteLine($"{tag.Id}\t{tag.Name}\t\t{tag.CreatedAt:yyyy-MM-dd}");
-            //}
-
-            //var aTag = await client.Tags.GetAsync("studentum", 615563);
-
-            //Console.WriteLine($"{aTag.Id}\t{aTag.Name}\t\t{aTag.CreatedAt:yyyy-MM-dd}");
-
-            var tag = new Tag { Name = "New Tag" };
-
-            var createdTag = await client.Tags.CreateAsync("mont-blanc", tag);
-
-            createdTag.ShouldNotBeNull();
-            createdTag.Name.ShouldBe(tag.Name);
-
-            const string newName = "New Name";
-            await client.Tags.UpdateAsync("mont-blanc", new Tag { Id = createdTag.Id, Name = newName, State = TagState.Hidden });
-
-            var updatedTag = await client.Tags.GetAsync("mont-blanc", createdTag.Id);
-
-            updatedTag.Name.ShouldBe(newName);
-            updatedTag.Id.ShouldBe(createdTag.Id);
-
-            await client.Tags.DeleteAsync("mont-blanc", updatedTag.Id);
 
             Console.ReadLine();
         }
