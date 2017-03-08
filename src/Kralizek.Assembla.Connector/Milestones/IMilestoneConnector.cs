@@ -15,7 +15,7 @@ namespace Assembla.Milestones
 
         Task<Milestone> GetAsync(string spaceIdOrWikiName, string milestoneId);
 
-        Task<Milestone> CreateAsync(string spaceIdOrWikiName, NewMilestone newMilestone);
+        Task<Milestone> CreateAsync(string spaceIdOrWikiName, Milestone newMilestone);
 
         Task UpdateAsync(string spaceIdOrWikiName, Milestone milestone);
 

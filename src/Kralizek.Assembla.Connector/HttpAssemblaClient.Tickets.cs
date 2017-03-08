@@ -12,7 +12,7 @@ namespace Assembla
 {
     public partial class HttpAssemblaClient : ITicketConnector
     {
-        private IReadOnlyDictionary<string, string> GetQueryParameters(Report? report = null, int? page = null, int? pageSize = null, TicketSortExpression? sortExpression = null, SortOrder? sort = null, TicketStatusFilter? ticketStatus = null)
+        private IReadOnlyDictionary<string, string> GetTicketQueryParameters(Report? report = null, int? page = null, int? pageSize = null, TicketSortExpression? sortExpression = null, SortOrder? sort = null, TicketStatusFilter? ticketStatus = null)
         {
             var queryParameters = new Dictionary<string, string>();
 
@@ -50,7 +50,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var queryParameters = GetQueryParameters(report, page, pageSize, sortExpression, sort);
+            var queryParameters = GetTicketQueryParameters(report, page, pageSize, sortExpression, sort);
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets";
 
@@ -98,7 +98,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(milestoneId));
             }
 
-            var queryParameters = GetQueryParameters(page: page, pageSize: pageSize, sortExpression: sortExpression, sort: sort, ticketStatus: ticketStatusFilter);
+            var queryParameters = GetTicketQueryParameters(page: page, pageSize: pageSize, sortExpression: sortExpression, sort: sort, ticketStatus: ticketStatusFilter);
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/milestone/{milestoneId}";
 
@@ -114,7 +114,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var queryParameters = GetQueryParameters(page: page, pageSize: pageSize);
+            var queryParameters = GetTicketQueryParameters(page: page, pageSize: pageSize);
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/no_milestone";
 
@@ -266,7 +266,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(tagId));
             }
 
-            var queryParameters = GetQueryParameters(page: page, pageSize: pageSize);
+            var queryParameters = GetTicketQueryParameters(page: page, pageSize: pageSize);
 
             var tickets = await _client.GetAsync<Ticket[]>($"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}/tickets", queryParameters).ConfigureAwait(false);
 

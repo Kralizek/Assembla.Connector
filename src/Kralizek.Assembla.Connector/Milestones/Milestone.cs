@@ -9,13 +9,13 @@ namespace Assembla.Milestones
         public string Id { get; set; }
 
         [JsonProperty("start_date")]
-        public DateTimeOffset StartDate { get; set; }
+        public DateTimeOffset? StartDate { get; set; }
 
         [JsonProperty("due_date")]
-        public DateTimeOffset DueDate { get; set; }
+        public DateTimeOffset? DueDate { get; set; }
 
         [JsonProperty("budget")]
-        public decimal Budget { get; set; }
+        public decimal? Budget { get; set; }
 
         [JsonProperty("title")]
         public string Title { get; set; }
@@ -39,7 +39,7 @@ namespace Assembla.Milestones
         public bool IsCompleted { get; set; }
 
         [JsonProperty("completed_date")]
-        public DateTimeOffset CompletedAt { get; set; }
+        public DateTimeOffset? CompletedAt { get; set; }
 
         [JsonProperty("updated_at")]
         public DateTimeOffset UpdatedAt { get; set; }
@@ -48,12 +48,12 @@ namespace Assembla.Milestones
         public string UpdatedBy { get; set; }
 
         [JsonProperty("release_level")]
-        public ReleaseLevel ReleaseLevel { get; set; }
+        public ReleaseLevel? ReleaseLevel { get; set; }
 
         [JsonProperty("release_notes")]
         public string ReleaseNotes { get; set; }
 
         [JsonProperty("planner_type")]
-        public PlannerType PlannerType { get; set; }
+        public PlannerType? PlannerType { get; set; }
     }
 }
