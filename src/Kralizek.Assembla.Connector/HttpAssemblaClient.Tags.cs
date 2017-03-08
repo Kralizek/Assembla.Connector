@@ -120,7 +120,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}";
 
-            await _client.DeleteAsync<Tag>(uri).ConfigureAwait(false);
+            await _client.DeleteAsync(uri).ConfigureAwait(false);
         }
     }
 

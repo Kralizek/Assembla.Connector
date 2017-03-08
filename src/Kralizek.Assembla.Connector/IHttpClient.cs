@@ -11,6 +11,6 @@ namespace Assembla
 
         Task PutAsync<TContent>(string url, TContent content, IReadOnlyDictionary<string, string> query = null);
 
-        Task DeleteAsync<TContent>(string url, IReadOnlyDictionary<string, string> query = null);
+        Task DeleteAsync(string url, IReadOnlyDictionary<string, string> query = null);
     }
 }

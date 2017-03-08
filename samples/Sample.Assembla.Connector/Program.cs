@@ -1,17 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Assembla;
+using Assembla.Spaces;
 using Microsoft.Extensions.Logging;
-using System.Net.Http;
-using Newtonsoft.Json;
-using System.Text;
 using Assembla.Tags;
 using Shouldly;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
 
 namespace Sample.Assembla.Connector
 {
@@ -46,15 +42,22 @@ namespace Sample.Assembla.Connector
 
             var client = serviceProvider.GetRequiredService<IAssemblaClient>();
 
-            await Tags(client);
+            //await client.SampleTags();
+            await client.SampleSpaces();
+
 
             Console.WriteLine("Sample completed");
             Console.ReadLine();
         }
 
-        private static async Task Tags(IAssemblaClient client)
+        
+    }
+
+    public static class SamplesExtensions
+    {
+        public static async Task SampleTags(this IAssemblaClient client)
         {
-            var tag = new Tag {Name = "New Tag"};
+            var tag = new Tag { Name = "New Tag" };
 
             var createdTag = await client.Tags.CreateAsync("mont-blanc", tag);
 
@@ -62,7 +65,7 @@ namespace Sample.Assembla.Connector
             createdTag.Name.ShouldBe(tag.Name);
 
             const string newName = "New Name";
-            await client.Tags.UpdateAsync("mont-blanc", new Tag {Id = createdTag.Id, Name = newName, State = TagState.Hidden});
+            await client.Tags.UpdateAsync("mont-blanc", new Tag { Id = createdTag.Id, Name = newName, State = TagState.Hidden });
 
             var updatedTag = await client.Tags.GetAsync("mont-blanc", createdTag.Id);
 
@@ -71,125 +74,34 @@ namespace Sample.Assembla.Connector
 
             await client.Tags.DeleteAsync("mont-blanc", updatedTag.Id);
         }
-    }
 
-    public class HttpClientSettings
-    {
-        public string ApiKey { get; set; }
-        public string ApiSecretKey { get; set; }
-    }
-
-    public class HttpClientImpl : IHttpClient
-    {
-        private readonly HttpClient _client;
-        private readonly ILogger<HttpClientImpl> _logger;
-        private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore, DateFormatHandling = DateFormatHandling.IsoDateFormat };
-
-        public HttpClientImpl(IOptions<HttpClientSettings> settings, ILogger<HttpClientImpl> logger)
+        public static async Task SampleSpaces(this IAssemblaClient client)
         {
-            if (settings == null)
-            {
-                throw new ArgumentNullException(nameof(settings));
-            }
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            var newSpace = new Space {Name = "Test Space"};
 
-            _client = CreateHttpClient(settings.Value);
-            _logger = logger;
-        }
-        
-        static HttpClient CreateHttpClient(HttpClientSettings settings)
-        {
-            HttpClient client = new HttpClient { BaseAddress = new Uri(@"https://api.assembla.com") };
-            client.DefaultRequestHeaders.Add("X-Api-Key", settings.ApiKey);
-            client.DefaultRequestHeaders.Add("X-Api-Secret", settings.ApiSecretKey);
+            var createdSpace = await client.Spaces.CreateAsync(newSpace);
 
-            return client;
-        }
+            createdSpace.ShouldNotBeNull();
+            createdSpace.Name.ShouldBe(newSpace.Name);
+            createdSpace.Id.ShouldNotBeNull();
 
-        private string ComposeUrl(string url, IReadOnlyDictionary<string, string> query = null)
-        {
-            string queryPart = string.Empty;
+            const string newName = "New Name";
+            await client.Spaces.UpdateAsync(new Space {Name = newName, WikiName = createdSpace.WikiName});
 
-            if (query != null)
-            {
-                queryPart = $"?{string.Join("&", query.Select(i => $"{i.Key}={i.Value}"))}";
-            }
+            var updatedSpace = await client.Spaces.GetAsync(createdSpace.WikiName);
 
-            return url + queryPart;
-        }
+            updatedSpace.Name.ShouldBe(newName);
+            updatedSpace.Id.ShouldBe(createdSpace.Id);
 
-        public async Task DeleteAsync<TContent>(string url, IReadOnlyDictionary<string, string> query = null)
-        {
-            string requestUrl = ComposeUrl(url, query);
+            //var copiedSpace = await client.Spaces.CopyAsync(createdSpace.WikiName, new Space {Name = "Copied Space", WikiName = "asd"});
+            //copiedSpace.ShouldNotBeNull();
 
-            _logger.LogDebug($"DELETE: {requestUrl}");
+            var listAll = await client.Spaces.GetAllAsync();
+            listAll.Count(c => c.Id == updatedSpace.Id).ShouldBe(1);
+            //listAll.Count(c => c.Id == copiedSpace.Id).ShouldBe(1);
 
-            using (var request = new HttpRequestMessage(HttpMethod.Delete, requestUrl))
-            using (var response = await _client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-            }
-        }
-
-        public async Task<TResult> GetAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null)
-        {
-            string requestUrl = ComposeUrl(url, query);
-
-            _logger.LogDebug($"GET: {requestUrl}");
-
-            using (var request = new HttpRequestMessage(HttpMethod.Get, requestUrl))
-            using (var response = await _client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-
-                string content = await response.Content.ReadAsStringAsync();
-
-                TResult result = JsonConvert.DeserializeObject<TResult>(content);
-
-                return result;
-            }
-        }
-
-        public async Task<TResult> PostAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
-        {
-            string json = JsonConvert.SerializeObject(content, SerializerSettings);
-            string requestUrl = ComposeUrl(url, query);
-
-            _logger.LogDebug($"POST: {requestUrl} {json}");
-
-            using (var request = new HttpRequestMessage(HttpMethod.Post, requestUrl) {
-                Content = new StringContent(json, Encoding.UTF8, "application/json")
-            })
-            using (var response = await _client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-
-                string incomingContent = await response.Content.ReadAsStringAsync();
-
-                TResult result = JsonConvert.DeserializeObject<TResult>(incomingContent);
-
-                return result;
-            }
-        }
-
-        public async Task PutAsync<TContent>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
-        {
-            string json = JsonConvert.SerializeObject(content, SerializerSettings);
-            string requestUrl = ComposeUrl(url, query);
-
-            _logger.LogDebug($"PUT: {requestUrl} {json}");
-
-            using (var request = new HttpRequestMessage(HttpMethod.Put, requestUrl)
-            {
-                Content = new StringContent(json, Encoding.UTF8, "application/json")
-            })
-            using (var response = await _client.SendAsync(request))
-            {
-                response.EnsureSuccessStatusCode();
-            }
+            await client.Spaces.DeleteAsync(updatedSpace.Id);
+            //await client.Spaces.DeleteAsync(copiedSpace.Id);
         }
     }
 }

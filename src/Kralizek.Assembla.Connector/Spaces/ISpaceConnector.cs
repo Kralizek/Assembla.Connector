@@ -9,12 +9,12 @@ namespace Assembla.Spaces
 
         Task<Space> GetAsync(string spaceIdOrWikiName);
 
-        Task<Space> CreateAsync(NewSpace newSpace);
+        Task<Space> CreateAsync(Space newSpace);
 
         Task UpdateAsync(Space space);
 
         Task DeleteAsync(string spaceIdOrWikiName);
 
-        Task CopyAsync(string spaceIdOrWikiName);
+        Task<Space> CopyAsync(string spaceIdOrWikiName, Space newSpace);
     }
 }
