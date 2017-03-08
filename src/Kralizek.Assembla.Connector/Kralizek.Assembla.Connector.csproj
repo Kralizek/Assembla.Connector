@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard1.4</TargetFramework>
     <RootNamespace>Assembla</RootNamespace>
-    <PackageId>Assembla.Connector</PackageId>
+    <PackageId>Kralizek.Assembla.Connector</PackageId>
     <Authors>Renato Golia</Authors>
     <Company />
     <Product />
