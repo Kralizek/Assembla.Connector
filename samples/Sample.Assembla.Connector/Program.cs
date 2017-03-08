@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using System.Text;
 using Assembla.Tags;
 using Shouldly;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Sample.Assembla.Connector
 {
@@ -17,32 +20,91 @@ namespace Sample.Assembla.Connector
         static void Main(string[] args)
         {
             MainAsync().Wait();
-
-            Console.WriteLine("Hello World!");
         }
 
         static async Task MainAsync()
         {
-            ILoggerFactory loggerFactory = new LoggerFactory();
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder().AddEnvironmentVariables();
 
-            IHttpClient httpClient = new HttpClientImpl();
+            var configuration = configurationBuilder.Build();
 
-            IAssemblaClient client = new HttpAssemblaClient(httpClient, loggerFactory.CreateLogger<HttpAssemblaClient>());
+            IServiceCollection services = new ServiceCollection();
+            services.AddLogging();
+            services.AddOptions();
+
+            services.Configure<HttpClientSettings>(configuration.GetSection("Assembla"));
+
+            services.AddTransient<IHttpClient, HttpClientImpl>();
+            services.AddTransient<IAssemblaClient, HttpAssemblaClient>();
 
 
+            var serviceProvider = services.BuildServiceProvider();
 
+            serviceProvider.GetRequiredService<ILoggerFactory>()
+                .AddConsole(LogLevel.Debug)
+                .AddDebug(LogLevel.Debug);
+
+            var client = serviceProvider.GetRequiredService<IAssemblaClient>();
+
+            await Tags(client);
+
+            Console.WriteLine("Sample completed");
             Console.ReadLine();
         }
+
+        private static async Task Tags(IAssemblaClient client)
+        {
+            var tag = new Tag {Name = "New Tag"};
+
+            var createdTag = await client.Tags.CreateAsync("mont-blanc", tag);
+
+            createdTag.ShouldNotBeNull();
+            createdTag.Name.ShouldBe(tag.Name);
+
+            const string newName = "New Name";
+            await client.Tags.UpdateAsync("mont-blanc", new Tag {Id = createdTag.Id, Name = newName, State = TagState.Hidden});
+
+            var updatedTag = await client.Tags.GetAsync("mont-blanc", createdTag.Id);
+
+            updatedTag.Name.ShouldBe(newName);
+            updatedTag.Id.ShouldBe(createdTag.Id);
+
+            await client.Tags.DeleteAsync("mont-blanc", updatedTag.Id);
+        }
+    }
+
+    public class HttpClientSettings
+    {
+        public string ApiKey { get; set; }
+        public string ApiSecretKey { get; set; }
     }
 
     public class HttpClientImpl : IHttpClient
     {
-        private readonly HttpClient client = CreateHttpClient();
+        private readonly HttpClient _client;
+        private readonly ILogger<HttpClientImpl> _logger;
         private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore, DateFormatHandling = DateFormatHandling.IsoDateFormat };
+
+        public HttpClientImpl(IOptions<HttpClientSettings> settings, ILogger<HttpClientImpl> logger)
+        {
+            if (settings == null)
+            {
+                throw new ArgumentNullException(nameof(settings));
+            }
+            if (logger == null)
+            {
+                throw new ArgumentNullException(nameof(logger));
+            }
+
+            _client = CreateHttpClient(settings.Value);
+            _logger = logger;
+        }
         
-        static HttpClient CreateHttpClient()
+        static HttpClient CreateHttpClient(HttpClientSettings settings)
         {
             HttpClient client = new HttpClient { BaseAddress = new Uri(@"https://api.assembla.com") };
+            client.DefaultRequestHeaders.Add("X-Api-Key", settings.ApiKey);
+            client.DefaultRequestHeaders.Add("X-Api-Secret", settings.ApiSecretKey);
 
             return client;
         }
@@ -61,8 +123,12 @@ namespace Sample.Assembla.Connector
 
         public async Task DeleteAsync<TContent>(string url, IReadOnlyDictionary<string, string> query = null)
         {
-            using (var request = new HttpRequestMessage(HttpMethod.Delete, ComposeUrl(url, query)))
-            using (var response = await client.SendAsync(request))
+            string requestUrl = ComposeUrl(url, query);
+
+            _logger.LogDebug($"DELETE: {requestUrl}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Delete, requestUrl))
+            using (var response = await _client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
             }
@@ -70,8 +136,12 @@ namespace Sample.Assembla.Connector
 
         public async Task<TResult> GetAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null)
         {
-            using (var request = new HttpRequestMessage(HttpMethod.Get, ComposeUrl(url, query)))
-            using (var response = await client.SendAsync(request))
+            string requestUrl = ComposeUrl(url, query);
+
+            _logger.LogDebug($"GET: {requestUrl}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Get, requestUrl))
+            using (var response = await _client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
 
@@ -86,11 +156,14 @@ namespace Sample.Assembla.Connector
         public async Task<TResult> PostAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
         {
             string json = JsonConvert.SerializeObject(content, SerializerSettings);
+            string requestUrl = ComposeUrl(url, query);
 
-            using (var request = new HttpRequestMessage(HttpMethod.Post, ComposeUrl(url, query)) {
+            _logger.LogDebug($"POST: {requestUrl} {json}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, requestUrl) {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             })
-            using (var response = await client.SendAsync(request))
+            using (var response = await _client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
 
@@ -105,12 +178,15 @@ namespace Sample.Assembla.Connector
         public async Task PutAsync<TContent>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
         {
             string json = JsonConvert.SerializeObject(content, SerializerSettings);
+            string requestUrl = ComposeUrl(url, query);
 
-            using (var request = new HttpRequestMessage(HttpMethod.Put, ComposeUrl(url, query))
+            _logger.LogDebug($"PUT: {requestUrl} {json}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Put, requestUrl)
             {
                 Content = new StringContent(json, Encoding.UTF8, "application/json")
             })
-            using (var response = await client.SendAsync(request))
+            using (var response = await _client.SendAsync(request))
             {
                 response.EnsureSuccessStatusCode();
             }
