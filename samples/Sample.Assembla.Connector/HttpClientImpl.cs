@@ -63,13 +63,7 @@ namespace Sample.Assembla.Connector
             using (var request = new HttpRequestMessage(HttpMethod.Delete, requestUrl))
             using (var response = await _client.SendAsync(request))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    string errorMessage = (string) JObject.Parse(responseContent)["error"];
-
-                    _logger.LogError($"DELETE: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
-                }
+                await LogResponse(response);
 
                 response.EnsureSuccessStatusCode();
             }
@@ -84,13 +78,7 @@ namespace Sample.Assembla.Connector
             using (var request = new HttpRequestMessage(HttpMethod.Get, requestUrl))
             using (var response = await _client.SendAsync(request))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    string errorMessage = (string)JObject.Parse(responseContent)["error"];
-
-                    _logger.LogError($"GET: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
-                }
+                await LogResponse(response);
 
                 response.EnsureSuccessStatusCode();
 
@@ -114,13 +102,28 @@ namespace Sample.Assembla.Connector
             })
             using (var response = await _client.SendAsync(request))
             {
-                if (!response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    string errorMessage = (string)JObject.Parse(responseContent)["error"];
+                await LogResponse(response);
 
-                    _logger.LogError($"POST: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
-                }
+                response.EnsureSuccessStatusCode();
+
+                string incomingContent = await response.Content.ReadAsStringAsync();
+
+                TResult result = JsonConvert.DeserializeObject<TResult>(incomingContent);
+
+                return result;
+            }
+        }
+
+        public async Task<TResult> PostAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null)
+        {
+            string requestUrl = ComposeUrl(url, query);
+
+            _logger.LogDebug($"POST: {requestUrl}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, requestUrl))
+            using (var response = await _client.SendAsync(request))
+            {
+                await LogResponse(response);
 
                 response.EnsureSuccessStatusCode();
 
@@ -145,15 +148,31 @@ namespace Sample.Assembla.Connector
             })
             using (var response = await _client.SendAsync(request))
             {
-                if (!response.IsSuccessStatusCode)
+                await LogResponse(response);
+            }
+        }
+
+        private async Task LogResponse(HttpResponseMessage response)
+        {
+            if (!response.IsSuccessStatusCode)
+            {
+                try
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
+
                     string errorMessage = (string)JObject.Parse(responseContent)["error"];
 
-                    _logger.LogError($"PUT: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
-                }
+                    _logger.LogError($"{response.RequestMessage.Method.Method.ToUpper()}: {response.RequestMessage.RequestUri.PathAndQuery} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
 
-                response.EnsureSuccessStatusCode();
+                }
+                catch
+                {
+                    _logger.LogError($"{response.RequestMessage.Method.Method.ToUpper()}: {response.RequestMessage.RequestUri.PathAndQuery} {response.StatusCode:D} '{response.ReasonPhrase}'");
+                }
+            }
+            else
+            {
+                _logger.LogDebug($"{response.RequestMessage.Method.Method.ToUpper()}: {response.RequestMessage.RequestUri.PathAndQuery} {response.StatusCode:D} '{response.ReasonPhrase}'");
             }
         }
     }

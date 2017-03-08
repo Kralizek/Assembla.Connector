@@ -9,6 +9,8 @@ namespace Assembla
 
         Task<TResult> PostAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null);
 
+        Task<TResult> PostAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null);
+
         Task PutAsync<TContent>(string url, TContent content, IReadOnlyDictionary<string, string> query = null);
 
         Task DeleteAsync(string url, IReadOnlyDictionary<string, string> query = null);

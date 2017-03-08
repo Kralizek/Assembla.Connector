@@ -31,6 +31,7 @@ namespace Sample.Assembla.Connector
             services.AddTransient<IAssemblaClient, HttpAssemblaClient>();
 
             services.AddTransient<ISample, SpacesSimpleSample>();
+            services.AddTransient<ISample, ToolSample>();
             services.AddTransient<ISample, SpacesCopySample>();
             services.AddTransient<ISample, TagsSample>();
 
@@ -54,9 +55,9 @@ namespace Sample.Assembla.Connector
                     await sample.Execute(client);
                     Console.WriteLine("OK");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    Console.WriteLine("FAIL");
+                    Console.WriteLine($"FAIL: {ex.Message}");
                 }
                 Console.WriteLine();
             }

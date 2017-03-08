@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Assembla.Spaces;
+using Assembla.Spaces.Tools;
 
 namespace Assembla
 {
@@ -72,6 +73,91 @@ namespace Assembla
             var copiedSpace = await _client.PostAsync<SpaceRequest, Space>($"/v1/spaces/{spaceIdOrWikiName}/copy", new SpaceRequest(space)).ConfigureAwait(false);
 
             return copiedSpace;
+        }
+
+        IToolConnector ISpaceConnector.Tools => this;
+    }
+
+    public partial class HttpAssemblaClient : IToolConnector
+    {
+        async Task<IReadOnlyList<Tool>> IToolConnector.GetAllInSpaceAsync(string spaceIdOrWikiName)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var tools = await _client.GetAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools").ConfigureAwait(false);
+
+            return tools;
+        }
+
+        async Task<IReadOnlyList<Tool>> IToolConnector.GetAllRepoInSpaceAsync(string spaceIdOrWikiName)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var tools = await _client.GetAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/repo").ConfigureAwait(false);
+
+            return tools;
+        }
+
+        async Task<Tool> IToolConnector.GetAsync(string spaceIdOrWikiName, string toolIdOrName)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (toolIdOrName == null)
+            {
+                throw new ArgumentNullException(nameof(toolIdOrName));
+            }
+
+            var tool = await _client.GetAsync<Tool>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolIdOrName}").ConfigureAwait(false);
+
+            return tool;
+        }
+
+        async Task<Tool> IToolConnector.AddAsync(string spaceIdOrWikiName, ToolType toolType)
+        {
+            var tool = await _client.PostAsync<Tool>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolType:D}/add").ConfigureAwait(false);
+
+            return tool;
+        }
+
+        async Task IToolConnector.UpdateAsync(string spaceIdOrWikiName, Tool tool)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (tool == null)
+            {
+                throw new ArgumentNullException(nameof(tool));
+            }
+            if (string.IsNullOrEmpty(tool.Id))
+            {
+                throw new ArgumentNullException(nameof(tool.Id));
+            }
+
+            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{tool.Id}", tool).ConfigureAwait(false);
+        }
+
+        async Task IToolConnector.DeleteAsync(string spaceIdOrWikiName, string toolIdOrName)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (toolIdOrName == null)
+            {
+                throw new ArgumentNullException(nameof(toolIdOrName));
+            }
+
+            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolIdOrName}").ConfigureAwait(false);
+
         }
     }
 }

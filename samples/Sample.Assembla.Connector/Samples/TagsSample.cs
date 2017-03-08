@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Assembla;
+using Assembla.Spaces.Tools;
 using Assembla.Tags;
 using Shouldly;
 
@@ -9,7 +10,7 @@ namespace Sample.Assembla.Connector.Samples
     {
         public async Task Execute(IAssemblaClient client)
         {
-            using (var test = await client.CreateDisposableSpace())
+            using (var test = await client.CreateDisposableSpace(requiredTools: ToolType.Tickets))
             {
                 var tag = new Tag { Name = "New Tag" };
 

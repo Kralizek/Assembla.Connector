@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Assembla.Spaces.Tools;
 
 namespace Assembla.Spaces
 {
@@ -16,5 +17,7 @@ namespace Assembla.Spaces
         Task DeleteAsync(string spaceIdOrWikiName);
 
         Task<Space> CopyAsync(string spaceIdOrWikiName, Space newSpace);
+
+        IToolConnector Tools { get; }
     }
 }
