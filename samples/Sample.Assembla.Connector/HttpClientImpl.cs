@@ -8,6 +8,7 @@ using Assembla;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Sample.Assembla.Connector
 {
@@ -62,6 +63,14 @@ namespace Sample.Assembla.Connector
             using (var request = new HttpRequestMessage(HttpMethod.Delete, requestUrl))
             using (var response = await _client.SendAsync(request))
             {
+                if (!response.IsSuccessStatusCode)
+                {
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    string errorMessage = (string) JObject.Parse(responseContent)["error"];
+
+                    _logger.LogError($"DELETE: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
+                }
+
                 response.EnsureSuccessStatusCode();
             }
         }
@@ -77,7 +86,10 @@ namespace Sample.Assembla.Connector
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"GET: {requestUrl} {response.StatusCode} {response.ReasonPhrase}");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    string errorMessage = (string)JObject.Parse(responseContent)["error"];
+
+                    _logger.LogError($"GET: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
                 }
 
                 response.EnsureSuccessStatusCode();
@@ -104,7 +116,10 @@ namespace Sample.Assembla.Connector
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"GET: {requestUrl} {response.StatusCode} {response.ReasonPhrase}");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    string errorMessage = (string)JObject.Parse(responseContent)["error"];
+
+                    _logger.LogError($"POST: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
                 }
 
                 response.EnsureSuccessStatusCode();
@@ -132,7 +147,10 @@ namespace Sample.Assembla.Connector
             {
                 if (!response.IsSuccessStatusCode)
                 {
-                    _logger.LogError($"GET: {requestUrl} {response.StatusCode} {response.ReasonPhrase}");
+                    string responseContent = await response.Content.ReadAsStringAsync();
+                    string errorMessage = (string)JObject.Parse(responseContent)["error"];
+
+                    _logger.LogError($"PUT: {requestUrl} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
                 }
 
                 response.EnsureSuccessStatusCode();
