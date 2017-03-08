@@ -10,10 +10,12 @@ namespace Assembla
 
     public partial class HttpAssemblaClient : IAssemblaClient
     {
+        private readonly IHttpClient _client;
         private readonly ILogger _logger;
 
-        public HttpAssemblaClient(ILogger<HttpAssemblaClient> logger)
+        public HttpAssemblaClient(IHttpClient client, ILogger<HttpAssemblaClient> logger)
         {
+            _client = client ?? throw new ArgumentNullException(nameof(client));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Assembla.Tags
@@ -20,5 +22,16 @@ namespace Assembla.Tags
         Task UpdateAsync(string spaceIdOrWikiName, Tag tag);
 
         Task DeleteAsync(string spaceIdOrWikiName, int tagId);
+    }
+
+    public class TagRequest
+    {
+        public TagRequest(Tag tag)
+        {
+            Tag = tag ?? throw new ArgumentNullException(nameof(tag));
+        }
+
+        [JsonProperty("tag")]
+        public Tag Tag { get; }
     }
 }
