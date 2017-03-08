@@ -22,7 +22,7 @@ namespace Assembla.Tickets
         public TicketPriority Priority { get; set; }
 
         [JsonProperty("completed_date")]
-        public DateTimeOffset CompletedDate { get; set; }
+        public DateTimeOffset? CompletedDate { get; set; }
 
         [JsonProperty("created_on")]
         public DateTimeOffset CreatedOn { get; set; }
@@ -51,8 +51,11 @@ namespace Assembla.Tickets
         [JsonProperty("space_id")]
         public string SpaceId { get; set; }
 
+        [JsonProperty("state")]
+        public TicketState State { get; set; }
+
         [JsonProperty("status")]
-        public TicketStatus Status { get; set; }
+        public string Status { get; set; }
 
         [JsonProperty("story_importance")]
         public int StoryImportance { get; set; }
@@ -107,7 +110,7 @@ namespace Assembla.Tickets
         PublicSupport = 2
     }
 
-    public enum TicketStatus
+    public enum TicketState
     {
         Closed = 0,
         Open = 1
@@ -121,4 +124,14 @@ namespace Assembla.Tickets
         Epic = 3
     }
 
+    public class TicketRequest
+    {
+        [JsonProperty("ticket")]
+        public Ticket Ticket { get; }
+
+        public TicketRequest(Ticket ticket)
+        {
+            Ticket = ticket ?? throw new ArgumentNullException(nameof(ticket));
+        }
+    }
 }

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Assembla.Documents;
 using Assembla.Tags;
 using Assembla.Tickets.CustomFields;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace Assembla.Tickets
 {
@@ -10,15 +13,15 @@ namespace Assembla.Tickets
     {
         Task<IReadOnlyList<Ticket>> GetAsync(string spaceIdOrWikiName, Report? report = null, int? page = null, int? pageSize = null, TicketSortExpression? sortExpression = null, SortOrder? sort = null);
 
-        Task<IReadOnlyList<Ticket>> GetUserActiveAsync(string spaceIdOrWikiName);
+        Task<IReadOnlyList<Ticket>> GetCurrentUserActiveAsync(string spaceIdOrWikiName);
 
-        Task<IReadOnlyList<Ticket>> GetUserFollowedAsync(string spaceIdOrWikiName);
+        Task<IReadOnlyList<Ticket>> GetCurrentUserFollowedAsync(string spaceIdOrWikiName);
 
-        Task<IReadOnlyList<Ticket>> GetInMilestoneAsync(string spaceIdOrWikiName, string milestoneId);
+        Task<IReadOnlyList<Ticket>> GetInMilestoneAsync(string spaceIdOrWikiName, string milestoneId, int? page = null, int? pageSize = null, TicketSortExpression? sortExpression = null, SortOrder? sort = null, TicketStatusFilter? ticketStatusFilter = null);
 
-        Task<IReadOnlyList<Ticket>> GetInNoMilestoneAsync(string spaceIdOrWikiName);
+        Task<IReadOnlyList<Ticket>> GetInNoMilestoneAsync(string spaceIdOrWikiName, int? page = null, int? pageSize = null);
 
-        Task<IReadOnlyList<Ticket>> GetByTagAsync(string spaceIdOrWikiName, int tagId);
+        Task<IReadOnlyList<Ticket>> GetByTagAsync(string spaceIdOrWikiName, int tagId, int? page = null, int? pageSize = null);
 
         Task<IReadOnlyList<CustomReport>> GetSpaceCustomReportAsync(string spaceIdOrWikiName);
 
@@ -26,13 +29,13 @@ namespace Assembla.Tickets
 
         Task<Ticket> GetByIdAsync(string spaceIdOrWikiName, string ticketId);
 
-        Task<Ticket> CreateAsync(string spaceIdOrWikiName, NewTicket newTicket);
+        Task<Ticket> CreateAsync(string spaceIdOrWikiName, Ticket newTicket);
 
         Task UpdateAsync(string spaceIdOrWikiName, Ticket ticket);
 
         Task DeleteAsync(string spaceIdOrWikiName, int ticketNumber);
 
-        Task<IReadOnlyList<Document>> GetTicketDocumentsAsync(string spaceIdOrWikiName, int ticketNumber);
+        Task<IReadOnlyList<Document>> GetTicketAttachmentsAsync(string spaceIdOrWikiName, int ticketNumber);
 
         Task<IReadOnlyList<Tag>> GetTicketTagsAsync(string spaceIdOrWikiName, int ticketNumber);
 
@@ -85,5 +88,19 @@ namespace Assembla.Tickets
         public static readonly Report AllUserActiveTickets = new Report(8);
         public static readonly Report AllUserClosedTickets = new Report(9);
         public static readonly Report AllUserFollowedTickets = new Report(10);
+    }
+
+    public struct TicketStatusFilter
+    {
+        public string Status { get; }
+
+        public TicketStatusFilter(string status)
+        {
+            Status = status;
+        }
+
+        public static readonly TicketStatusFilter Active = new TicketStatusFilter("active");
+        public static readonly TicketStatusFilter Closed = new TicketStatusFilter("closed");
+        public static readonly TicketStatusFilter All = new TicketStatusFilter("all");
     }
 }
