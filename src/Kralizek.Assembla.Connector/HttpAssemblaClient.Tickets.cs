@@ -7,6 +7,7 @@ using Assembla.Tags;
 using Assembla.Tickets;
 using Assembla.Tickets.CustomFields;
 using Assembla.Tickets.CustomReports;
+using Assembla.Tickets.Statuses;
 
 namespace Assembla
 {
@@ -274,6 +275,87 @@ namespace Assembla
         }
 
         ICustomFieldConnector ITicketConnector.CustomFields => this;
+
+        IStatusConnector ITicketConnector.Statuses => this;
+    }
+
+    public partial class HttpAssemblaClient : IStatusConnector
+    {
+        async Task<IReadOnlyList<TicketStatus>> IStatusConnector.GetAllAsync(string spaceIdOrWikiName)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var statuses = await _client.GetAsync<TicketStatus[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses").ConfigureAwait(false);
+
+            return statuses;
+        }
+
+        async Task<TicketStatus> IStatusConnector.GetAsync(string spaceIdOrWikiName, string statusId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (statusId == null)
+            {
+                throw new ArgumentNullException(nameof(statusId));
+            }
+
+            var status = await _client.GetAsync<TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
+
+            return status;
+        }
+
+        async Task<TicketStatus> IStatusConnector.CreateAsync(string spaceIdOrWikiName, TicketStatus status)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (status == null)
+            {
+                throw new ArgumentNullException(nameof(status));
+            }
+
+            var createdStatus = await _client.PostAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
+
+            return createdStatus;
+        }
+
+        async Task IStatusConnector.UpdateAsync(string spaceIdOrWikiName, TicketStatus status)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (status == null)
+            {
+                throw new ArgumentNullException(nameof(status));
+            }
+            if (status.Id == null)
+            {
+                throw new ArgumentNullException(nameof(status.Id));
+            }
+
+            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{status.Id}", new TicketStatusRequest(status)).ConfigureAwait(false);
+        }
+
+        async Task IStatusConnector.DeleteAsync(string spaceIdOrWikiName, string statusId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (statusId == null)
+            {
+                throw new ArgumentNullException(nameof(statusId));
+            }
+
+            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
+        }
     }
 
     public partial class HttpAssemblaClient : ICustomFieldConnector

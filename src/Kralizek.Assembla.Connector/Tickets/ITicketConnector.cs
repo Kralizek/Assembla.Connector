@@ -5,6 +5,7 @@ using Assembla.Documents;
 using Assembla.Tags;
 using Assembla.Tickets.CustomFields;
 using Assembla.Tickets.CustomReports;
+using Assembla.Tickets.Statuses;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
@@ -41,6 +42,8 @@ namespace Assembla.Tickets
         Task<IReadOnlyList<Tag>> GetTicketTagsAsync(string spaceIdOrWikiName, int ticketNumber);
 
         ICustomFieldConnector CustomFields { get; }
+
+        IStatusConnector Statuses { get; }
     }
 
     public struct TicketSortExpression
