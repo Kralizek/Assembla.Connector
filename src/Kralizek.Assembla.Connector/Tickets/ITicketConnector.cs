@@ -3,6 +3,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using Assembla.Documents;
 using Assembla.Tags;
+using Assembla.Tickets.Comments;
 using Assembla.Tickets.CustomFields;
 using Assembla.Tickets.CustomReports;
 using Assembla.Tickets.Statuses;
@@ -43,7 +44,9 @@ namespace Assembla.Tickets
 
         ICustomFieldConnector CustomFields { get; }
 
-        IStatusConnector Statuses { get; }
+        ITicketStatusConnector Statuses { get; }
+
+        ITicketCommentConnector Comments { get; }
     }
 
     public struct TicketSortExpression

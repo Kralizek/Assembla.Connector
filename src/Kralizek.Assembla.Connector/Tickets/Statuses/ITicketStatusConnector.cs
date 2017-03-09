@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace Assembla.Tickets.Statuses
 {
-    public interface IStatusConnector
+    public interface ITicketStatusConnector
     {
         Task<IReadOnlyList<TicketStatus>> GetAllAsync(string spaceIdOrWikiName);
 

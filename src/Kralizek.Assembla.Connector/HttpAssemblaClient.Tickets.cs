@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Assembla.Documents;
 using Assembla.Tags;
 using Assembla.Tickets;
+using Assembla.Tickets.Comments;
 using Assembla.Tickets.CustomFields;
 using Assembla.Tickets.CustomReports;
 using Assembla.Tickets.Statuses;
@@ -276,12 +277,75 @@ namespace Assembla
 
         ICustomFieldConnector ITicketConnector.CustomFields => this;
 
-        IStatusConnector ITicketConnector.Statuses => this;
+        ITicketStatusConnector ITicketConnector.Statuses => this;
+
+        ITicketCommentConnector ITicketConnector.Comments => this;
     }
 
-    public partial class HttpAssemblaClient : IStatusConnector
+    public partial class HttpAssemblaClient : ITicketCommentConnector
     {
-        async Task<IReadOnlyList<TicketStatus>> IStatusConnector.GetAllAsync(string spaceIdOrWikiName)
+        public async Task<IReadOnlyList<Comment>> GetAllInTicketAsync(string spaceIdOrWikiName, int ticketNumber)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var comments = await _client.GetAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
+
+            return comments;
+        }
+
+        public async Task<Comment> GetAsync(string spaceIdOrWikiName, int ticketNumber, int commentId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var comment = await _client.GetAsync<Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{commentId}").ConfigureAwait(false);
+
+            return comment;
+        }
+
+        public async Task<Comment> CreateAsync(string spaceIdOrWikiName, int ticketNumber, Comment comment)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (comment == null)
+            {
+                throw new ArgumentNullException(nameof(comment));
+            }
+
+            var createdComment = await _client.PostAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
+
+            return createdComment;
+        }
+
+        public async Task UpdateAsync(string spaceIdOrWikiName, int ticketNumber, Comment comment)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (comment == null)
+            {
+                throw new ArgumentNullException(nameof(comment));
+            }
+            if (comment.Id == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(comment.Id));
+            }
+
+            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{comment.Id}", new CommentRequest(comment)).ConfigureAwait(false);
+        }
+    }
+
+    public partial class HttpAssemblaClient : ITicketStatusConnector
+    {
+        async Task<IReadOnlyList<TicketStatus>> ITicketStatusConnector.GetAllAsync(string spaceIdOrWikiName)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -293,7 +357,7 @@ namespace Assembla
             return statuses;
         }
 
-        async Task<TicketStatus> IStatusConnector.GetAsync(string spaceIdOrWikiName, string statusId)
+        async Task<TicketStatus> ITicketStatusConnector.GetAsync(string spaceIdOrWikiName, string statusId)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -309,7 +373,7 @@ namespace Assembla
             return status;
         }
 
-        async Task<TicketStatus> IStatusConnector.CreateAsync(string spaceIdOrWikiName, TicketStatus status)
+        async Task<TicketStatus> ITicketStatusConnector.CreateAsync(string spaceIdOrWikiName, TicketStatus status)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -325,7 +389,7 @@ namespace Assembla
             return createdStatus;
         }
 
-        async Task IStatusConnector.UpdateAsync(string spaceIdOrWikiName, TicketStatus status)
+        async Task ITicketStatusConnector.UpdateAsync(string spaceIdOrWikiName, TicketStatus status)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -343,7 +407,7 @@ namespace Assembla
             await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{status.Id}", new TicketStatusRequest(status)).ConfigureAwait(false);
         }
 
-        async Task IStatusConnector.DeleteAsync(string spaceIdOrWikiName, string statusId)
+        async Task ITicketStatusConnector.DeleteAsync(string spaceIdOrWikiName, string statusId)
         {
             if (spaceIdOrWikiName == null)
             {

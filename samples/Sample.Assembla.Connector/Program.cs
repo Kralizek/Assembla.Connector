@@ -30,15 +30,17 @@ namespace Sample.Assembla.Connector
             services.AddTransient<IHttpClient, HttpClientImpl>();
             services.AddTransient<IAssemblaClient, HttpAssemblaClient>();
 
-            services.AddTransient<ISample, SpacesSimpleSample>();
-            services.AddTransient<ISample, ToolSample>();
-            services.AddTransient<ISample, SpacesCopySample>();
-            services.AddTransient<ISample, TagsSample>();
-            services.AddTransient<ISample, TicketSample>();
-            services.AddTransient<ISample, TicketListSample>();
-            services.AddTransient<ISample, CustomFieldSample>();
-            services.AddTransient<ISample, MilestoneSample>();
-            services.AddTransient<ISample, TicketStatusSample>();
+            services
+                .AddTransient<ISample, SpacesSimpleSample>()
+                .AddTransient<ISample, ToolSample>()
+                .AddTransient<ISample, SpacesCopySample>()
+                .AddTransient<ISample, TagsSample>()
+                .AddTransient<ISample, TicketSample>()
+                .AddTransient<ISample, TicketListSample>()
+                .AddTransient<ISample, CustomFieldSample>()
+                .AddTransient<ISample, MilestoneSample>()
+                .AddTransient<ISample, TicketStatusSample>()
+                .AddTransient<ISample, TicketCommentSample>();
 
             var serviceProvider = services.BuildServiceProvider();
 
