@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Assembla.Documents;
 using Assembla.Tags;
 using Assembla.Tickets;
+using Assembla.Tickets.Associations;
 using Assembla.Tickets.Comments;
 using Assembla.Tickets.CustomFields;
 using Assembla.Tickets.CustomReports;
@@ -280,6 +281,107 @@ namespace Assembla
         ITicketStatusConnector ITicketConnector.Statuses => this;
 
         ITicketCommentConnector ITicketConnector.Comments => this;
+
+        ITicketAssociationConnector ITicketConnector.Associations => this;
+    }
+
+    public partial class HttpAssemblaClient : ITicketAssociationConnector
+    {
+        async Task<IReadOnlyList<TicketAssociation>> ITicketAssociationConnector.GetAllOfTicketAsync(string spaceIdOrWikiName, int ticketNumber)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (ticketNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ticketNumber));
+            }
+
+            var associations = await _client.GetAsync<TicketAssociation[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations").ConfigureAwait(false);
+
+            return associations;
+        }
+
+        async Task<TicketAssociation> ITicketAssociationConnector.GetAsync(string spaceIdOrWikiName, int ticketNumber, string associationId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (associationId == null)
+            {
+                throw new ArgumentNullException(nameof(associationId));
+            }
+            if (ticketNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ticketNumber));
+            }
+
+            var association = await _client.GetAsync<TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
+
+            return association;
+        }
+
+        async Task<TicketAssociation> ITicketAssociationConnector.CreateAsync(string spaceIdOrWikiName, int ticketNumber, TicketAssociation association)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (association == null)
+            {
+                throw new ArgumentNullException(nameof(association));
+            }
+            if (ticketNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ticketNumber));
+            }
+
+            var createdAssociation = await _client.PostAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
+
+            return createdAssociation;
+        }
+
+        async Task ITicketAssociationConnector.UpdateAsync(string spaceIdOrWikiName, int ticketNumber, TicketAssociation association)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (association == null)
+            {
+                throw new ArgumentNullException(nameof(association));
+            }
+            if (ticketNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ticketNumber));
+            }
+            if (association.Id == null)
+            {
+                throw new ArgumentNullException(nameof(association.Id));
+            }
+
+            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{association.Id}", new TicketAssociationRequest(association)).ConfigureAwait(false);
+        }
+
+        async Task ITicketAssociationConnector.DeleteAsync(string spaceIdOrWikiName, int ticketNumber, string associationId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (associationId == null)
+            {
+                throw new ArgumentNullException(nameof(associationId));
+            }
+            if (ticketNumber == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(ticketNumber));
+            }
+
+            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
+        }
     }
 
     public partial class HttpAssemblaClient : ITicketCommentConnector
