@@ -13,7 +13,7 @@ build_script:
 
     dotnet restore
 
-    dotnet build -c $env:CONFIGURATION --no-dependencies
+    dotnet build -c $env:CONFIGURATION --no-incremental
 
     dotnet pack -c $env:CONFIGURATION --no-build
 
