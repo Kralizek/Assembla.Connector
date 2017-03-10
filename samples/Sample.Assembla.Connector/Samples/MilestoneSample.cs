@@ -1,7 +1,8 @@
 using System.Threading.Tasks;
-using Assembla;
-using Assembla.Milestones;
-using Assembla.Spaces.Tools;
+using Kralizek.Assembla;
+using Kralizek.Assembla.Connector;
+using Kralizek.Assembla.Connector.Milestones;
+using Kralizek.Assembla.Connector.Spaces.Tools;
 using Shouldly;
 
 namespace Sample.Assembla.Connector.Samples

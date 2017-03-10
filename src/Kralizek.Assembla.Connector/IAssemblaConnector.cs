@@ -1,11 +1,11 @@
-﻿using Assembla.Files;
-using Assembla.Milestones;
-using Assembla.Spaces;
-using Assembla.Tags;
-using Assembla.Tickets;
-using Assembla.Users;
+﻿using Kralizek.Assembla.Connector.Files;
+using Kralizek.Assembla.Connector.Milestones;
+using Kralizek.Assembla.Connector.Spaces;
+using Kralizek.Assembla.Connector.Tags;
+using Kralizek.Assembla.Connector.Tickets;
+using Kralizek.Assembla.Connector.Users;
 
-namespace Assembla
+namespace Kralizek.Assembla
 {
     public interface IAssemblaClient
     {

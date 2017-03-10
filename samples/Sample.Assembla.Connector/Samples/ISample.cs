@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
-using Assembla;
+using Kralizek.Assembla;
+using Kralizek.Assembla.Connector;
 
 namespace Sample.Assembla.Connector.Samples
 {

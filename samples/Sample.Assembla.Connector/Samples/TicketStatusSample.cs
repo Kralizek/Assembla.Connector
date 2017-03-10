@@ -1,10 +1,11 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Assembla;
-using Assembla.Spaces.Tools;
-using Assembla.Tickets;
-using Assembla.Tickets.Statuses;
+using Kralizek.Assembla;
+using Kralizek.Assembla.Connector;
+using Kralizek.Assembla.Connector.Spaces.Tools;
+using Kralizek.Assembla.Connector.Tickets;
+using Kralizek.Assembla.Connector.Tickets.Statuses;
 using Shouldly;
 
 namespace Sample.Assembla.Connector.Samples

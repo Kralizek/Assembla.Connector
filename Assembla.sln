@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kralizek.Assembla.Connector", "src\Kralizek.Assembla.Connector\Kralizek.Assembla.Connector.csproj", "{E1C506BF-3F60-4DD9-83C9-B7013AD219F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kralizek.Assembla.Connector", "src\Kralizek.Assembla.Connector\Kralizek.Assembla.Connector.csproj", "{E1C506BF-3F60-4DD9-83C9-B7013AD219F1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3432D0AB-2645-4CF6-AE26-6D8C2361FED0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{D8236B85-6EA2-4C22-8B76-040215D21DFC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sample.Assembla.Connector", "samples\Sample.Assembla.Connector\Sample.Assembla.Connector.csproj", "{4486CC09-0D0C-42D5-8239-B82F0A3E3BE0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sample.Assembla.Connector", "samples\Sample.Assembla.Connector\Sample.Assembla.Connector.csproj", "{4486CC09-0D0C-42D5-8239-B82F0A3E3BE0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{95940316-571A-4DE0-BB8B-0CE9E8F78FB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

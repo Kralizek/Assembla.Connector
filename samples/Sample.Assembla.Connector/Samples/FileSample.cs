@@ -1,10 +1,11 @@
 using System.Text;
 using System.Threading.Tasks;
-using Assembla;
-using Assembla.Files;
-using Assembla.Spaces.Tools;
-using Assembla.Tickets;
-using Assembla.Users;
+using Kralizek.Assembla;
+using Kralizek.Assembla.Connector;
+using Kralizek.Assembla.Connector.Files;
+using Kralizek.Assembla.Connector.Spaces.Tools;
+using Kralizek.Assembla.Connector.Tickets;
+using Kralizek.Assembla.Connector.Users;
 using Newtonsoft.Json;
 using Shouldly;
 

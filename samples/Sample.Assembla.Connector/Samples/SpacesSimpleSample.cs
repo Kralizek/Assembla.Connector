@@ -1,7 +1,8 @@
 using System.Linq;
 using System.Threading.Tasks;
-using Assembla;
-using Assembla.Spaces;
+using Kralizek.Assembla;
+using Kralizek.Assembla.Connector;
+using Kralizek.Assembla.Connector.Spaces;
 using Shouldly;
 
 namespace Sample.Assembla.Connector.Samples

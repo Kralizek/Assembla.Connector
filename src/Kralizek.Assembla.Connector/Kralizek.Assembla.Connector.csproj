@@ -1,12 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard1.3</TargetFramework>
-    <RootNamespace>Assembla</RootNamespace>
+    <RootNamespace>Kralizek.Assembla</RootNamespace>
     <PackageId>Kralizek.Assembla.Connector</PackageId>
     <Authors>Renato Golia</Authors>
-    <Company />
-    <Product />
     <Description>A low level library to access Assembla REST API</Description>
+    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />

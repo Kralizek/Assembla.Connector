@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Assembla;
-using Assembla.Spaces;
-using Assembla.Spaces.Tools;
-using Assembla.Users;
+using Kralizek.Assembla;
+using Kralizek.Assembla.Connector;
+using Kralizek.Assembla.Connector.Spaces;
+using Kralizek.Assembla.Connector.Spaces.Tools;
+using Kralizek.Assembla.Connector.Users;
 using Microsoft.Extensions.Logging;
 
 namespace Sample.Assembla.Connector
