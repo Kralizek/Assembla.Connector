@@ -1,4 +1,5 @@
-﻿using Assembla.Milestones;
+﻿using Assembla.Documents;
+using Assembla.Milestones;
 using Assembla.Spaces;
 using Assembla.Tags;
 using Assembla.Tickets;
@@ -14,5 +15,7 @@ namespace Assembla
         ITicketConnector Tickets { get; }
 
         ITagConnector Tags { get; }
+
+        IDocumentConnector Documents { get; }
     }
 }

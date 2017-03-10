@@ -4,6 +4,7 @@ using Assembla.Tags;
 using Assembla.Tickets;
 using Microsoft.Extensions.Logging;
 using System;
+using Assembla.Documents;
 
 namespace Assembla
 {
@@ -26,5 +27,6 @@ namespace Assembla
         public ITicketConnector Tickets => this;
 
         public ITagConnector Tags => this;
+        public IDocumentConnector Documents => this;
     }
 }

@@ -10,13 +10,16 @@ namespace Assembla
     {
         Task<TResult> GetAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null);
 
-        Task<TResult> PostAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null);
+        Task<byte[]> GetRawAsync(string url, IReadOnlyDictionary<string, string> query = null);
 
-        Task<TResult> PostAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null);
+        Task<TResult> PostJsonAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null);
+
+        Task<TResult> PostAsync<TResult>(string url, HttpContent content, IReadOnlyDictionary<string, string> query = null);
+
+        Task<TResult> PostCommandAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null);
 
         Task PutAsync<TContent>(string url, TContent content, IReadOnlyDictionary<string, string> query = null);
 
         Task DeleteAsync(string url, IReadOnlyDictionary<string, string> query = null);
     }
-
 }

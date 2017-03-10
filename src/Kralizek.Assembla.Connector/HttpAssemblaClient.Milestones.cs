@@ -110,7 +110,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(milestone));
             }
 
-            var createdMilestone = await _client.PostAsync<MilestoneRequest, Milestone>($"/v1/spaces/{spaceIdOrWikiName}/milestones", new MilestoneRequest(milestone)).ConfigureAwait(false);
+            var createdMilestone = await _client.PostJsonAsync<MilestoneRequest, Milestone>($"/v1/spaces/{spaceIdOrWikiName}/milestones", new MilestoneRequest(milestone)).ConfigureAwait(false);
 
             return createdMilestone;
         }

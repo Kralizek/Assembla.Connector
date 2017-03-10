@@ -90,7 +90,26 @@ namespace Sample.Assembla.Connector
             }
         }
 
-        public async Task<TResult> PostAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
+        public async Task<byte[]> GetRawAsync(string url, IReadOnlyDictionary<string, string> query = null)
+        {
+            string requestUrl = ComposeUrl(url, query);
+
+            _logger.LogDebug($"GET: {requestUrl}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Get, requestUrl))
+            using (var response = await _client.SendAsync(request))
+            {
+                await LogResponse(response);
+
+                response.EnsureSuccessStatusCode();
+
+                var content = await response.Content.ReadAsByteArrayAsync();
+
+                return content;
+            }
+        }
+
+        public async Task<TResult> PostJsonAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
         {
             string json = JsonConvert.SerializeObject(content, SerializerSettings);
             string requestUrl = ComposeUrl(url, query);
@@ -114,7 +133,28 @@ namespace Sample.Assembla.Connector
             }
         }
 
-        public async Task<TResult> PostAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null)
+        public async Task<TResult> PostAsync<TResult>(string url, HttpContent content, IReadOnlyDictionary<string, string> query = null)
+        {
+            string requestUrl = ComposeUrl(url, query);
+
+            _logger.LogDebug($"POST: {requestUrl} {content.GetType().Name}");
+
+            using (var request = new HttpRequestMessage(HttpMethod.Post, requestUrl) { Content = content })
+            using (var response = await _client.SendAsync(request))
+            {
+                await LogResponse(response);
+
+                response.EnsureSuccessStatusCode();
+
+                string incomingContent = await response.Content.ReadAsStringAsync();
+
+                TResult result = JsonConvert.DeserializeObject<TResult>(incomingContent);
+
+                return result;
+            }
+        }
+
+        public async Task<TResult> PostCommandAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null)
         {
             string requestUrl = ComposeUrl(url, query);
 
@@ -154,6 +194,8 @@ namespace Sample.Assembla.Connector
 
         private async Task LogResponse(HttpResponseMessage response)
         {
+            var eventId = new EventId((int) response.StatusCode, response.ReasonPhrase);
+
             if (!response.IsSuccessStatusCode)
             {
                 try
@@ -162,17 +204,41 @@ namespace Sample.Assembla.Connector
 
                     string errorMessage = (string)JObject.Parse(responseContent)["error"];
 
-                    _logger.LogError($"{response.RequestMessage.Method.Method.ToUpper()}: {response.RequestMessage.RequestUri.PathAndQuery} {response.StatusCode:D} '{response.ReasonPhrase}' '{errorMessage}'");
+                    var state = new
+                    {
+                        method = response.RequestMessage.Method.Method.ToUpper(),
+                        requestUri = response.RequestMessage.RequestUri.PathAndQuery,
+                        status = response.StatusCode,
+                        reasonPhrase = response.ReasonPhrase,
+                        errorMessage
+                    };
 
+                    _logger.LogError(eventId, state, s => $"{s.method}: {s.requestUri} {s.status:D} '{s.reasonPhrase}' '{s.errorMessage}'");
                 }
-                catch
+                catch (Exception ex)
                 {
-                    _logger.LogError($"{response.RequestMessage.Method.Method.ToUpper()}: {response.RequestMessage.RequestUri.PathAndQuery} {response.StatusCode:D} '{response.ReasonPhrase}'");
+                    var state = new
+                    {
+                        method = response.RequestMessage.Method.Method.ToUpper(),
+                        requestUri = response.RequestMessage.RequestUri.PathAndQuery,
+                        status = response.StatusCode,
+                        reasonPhrase = response.ReasonPhrase
+                    };
+
+                    _logger.LogError(eventId, state, ex, (s,e) => $"{s.method}: {s.requestUri} {s.status:D} '{s.reasonPhrase}' '{e.Message}'");
                 }
             }
             else
             {
-                _logger.LogDebug($"{response.RequestMessage.Method.Method.ToUpper()}: {response.RequestMessage.RequestUri.PathAndQuery} {response.StatusCode:D} '{response.ReasonPhrase}'");
+                var state = new
+                {
+                    method = response.RequestMessage.Method.Method.ToUpper(),
+                    requestUri = response.RequestMessage.RequestUri.PathAndQuery,
+                    status = response.StatusCode,
+                    reasonPhrase = response.ReasonPhrase
+                };
+
+                _logger.LogDebug(eventId, state, s => $"{s.method}: {s.requestUri} {s.status:D} '{s.reasonPhrase}'");
             }
         }
     }

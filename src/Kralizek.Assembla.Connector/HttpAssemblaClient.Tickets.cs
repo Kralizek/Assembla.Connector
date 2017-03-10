@@ -189,7 +189,7 @@ namespace Assembla
 
             var uri = $"/v1/spaces/{spaceIdOrWikiName}/tickets";
 
-            var createdTicket = await _client.PostAsync<TicketRequest, Ticket>(uri, new TicketRequest(newTicket)).ConfigureAwait(false);
+            var createdTicket = await _client.PostJsonAsync<TicketRequest, Ticket>(uri, new TicketRequest(newTicket)).ConfigureAwait(false);
 
             return createdTicket;
         }
@@ -338,7 +338,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var createdAssociation = await _client.PostAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
+            var createdAssociation = await _client.PostJsonAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
 
             return createdAssociation;
         }
@@ -421,7 +421,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            var createdComment = await _client.PostAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
+            var createdComment = await _client.PostJsonAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
 
             return createdComment;
         }
@@ -486,7 +486,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(status));
             }
 
-            var createdStatus = await _client.PostAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
+            var createdStatus = await _client.PostJsonAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
 
             return createdStatus;
         }
@@ -565,7 +565,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customField));
             }
 
-            var createdField = await _client.PostAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
+            var createdField = await _client.PostJsonAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
 
             return createdField;
         }

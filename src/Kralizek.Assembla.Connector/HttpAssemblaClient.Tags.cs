@@ -90,7 +90,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
 
-            var newTag = await _client.PostAsync<TagRequest, Tag>(uri, new TagRequest(tag)).ConfigureAwait(false);
+            var newTag = await _client.PostJsonAsync<TagRequest, Tag>(uri, new TagRequest(tag)).ConfigureAwait(false);
 
             return newTag;
         }
