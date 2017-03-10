@@ -10,6 +10,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using Assembla.Files;
+using Assembla.Users;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -37,6 +38,8 @@ namespace Assembla
         public ITagConnector Tags => this;
 
         public IFileConnector Files => this;
+
+        public IUserConnector Users => this;
 
         #region Http methods
 

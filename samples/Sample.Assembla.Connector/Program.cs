@@ -50,6 +50,7 @@ namespace Sample.Assembla.Connector
                 .AddTransient<ISample, TicketCommentSample>()
                 .AddTransient<ISample, TicketAssociationSample>()
                 .AddTransient<ISample, FileSample>()
+                .AddTransient<ISample, UserSample>()
             ;
 
             var serviceProvider = services.BuildServiceProvider();

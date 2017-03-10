@@ -3,6 +3,7 @@ using Assembla.Milestones;
 using Assembla.Spaces;
 using Assembla.Tags;
 using Assembla.Tickets;
+using Assembla.Users;
 
 namespace Assembla
 {
@@ -17,5 +18,7 @@ namespace Assembla
         ITagConnector Tags { get; }
 
         IFileConnector Files { get; }
+
+        IUserConnector Users { get; }
     }
 }
