@@ -3,9 +3,9 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
-namespace Assembla.Documents
+namespace Assembla.Files
 {
-    public class Document
+    public class File
     {
         [JsonProperty("id")]
         public string Id { get; set; }
@@ -20,13 +20,13 @@ namespace Assembla.Documents
         public string Description { get; set; }
 
         [JsonProperty("ticket_id")]
-        public int? TicketId { get; set; }
+        public string TicketId { get; set; }
 
         [JsonProperty("attachable_guid")]
         public string AttachableGuid { get; set; }
 
         [JsonProperty("attachable_id")]
-        public int? AttachableId { get; set; }
+        public string AttachableId { get; set; }
 
         [JsonProperty("position")]
         public int Position { get; set; }
@@ -65,13 +65,13 @@ namespace Assembla.Documents
         public string SpaceId { get; set; }
 
         [JsonProperty("url")]
-        public string Url { get; set; }
+        public Uri Url { get; set; }
 
-        public bool IsAttachedToTicket() => AttachableType.HasValue && AttachableType.Value == Documents.AttachableType.Ticket && AttachableId.HasValue;
+        public bool IsAttachedToTicket() => AttachableType.HasValue && AttachableType.Value == Files.AttachableType.Ticket && AttachableId != null;
 
-        public bool IsAttachedToMessage() => AttachableType.HasValue && AttachableType.Value == Documents.AttachableType.Flow && AttachableId.HasValue;
+        public bool IsAttachedToMessage() => AttachableType.HasValue && AttachableType.Value == Files.AttachableType.Flow && AttachableId != null;
 
-        public bool IsAttachedToMilestone() => AttachableType.HasValue && AttachableType.Value == Documents.AttachableType.Milestone && AttachableId.HasValue;
+        public bool IsAttachedToMilestone() => AttachableType.HasValue && AttachableType.Value == Files.AttachableType.Milestone && AttachableId != null;
 
     }
 
@@ -81,20 +81,5 @@ namespace Assembla.Documents
         [EnumMember(Value = "Ticket")] Ticket = 1,
         [EnumMember(Value = "Flow")] Flow = 2,
         [EnumMember(Value = "Milestone")] Milestone = 3
-    }
-
-    public class DocumentRequest
-    {
-        [JsonProperty("document")]
-        public Document Document { get; }
-
-        public DocumentRequest(Document document)
-        {
-            if (document == null)
-            {
-                throw new ArgumentNullException(nameof(document));
-            }
-            Document = document;
-        }
     }
 }

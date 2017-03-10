@@ -1,4 +1,4 @@
-﻿using Assembla.Documents;
+﻿using Assembla.Files;
 using Assembla.Milestones;
 using Assembla.Spaces;
 using Assembla.Tags;
@@ -16,6 +16,6 @@ namespace Assembla
 
         ITagConnector Tags { get; }
 
-        IDocumentConnector Documents { get; }
+        IFileConnector Files { get; }
     }
 }

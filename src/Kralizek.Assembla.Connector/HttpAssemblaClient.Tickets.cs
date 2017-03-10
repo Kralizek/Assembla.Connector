@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Assembla.Documents;
+using Assembla.Files;
 using Assembla.Tags;
 using Assembla.Tickets;
 using Assembla.Tickets.Associations;
@@ -226,7 +226,7 @@ namespace Assembla
             await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}").ConfigureAwait(false);
         }
 
-        async Task<IReadOnlyList<Document>> ITicketConnector.GetTicketAttachmentsAsync(string spaceIdOrWikiName, int ticketNumber)
+        async Task<IReadOnlyList<File>> ITicketConnector.GetTicketAttachmentsAsync(string spaceIdOrWikiName, int ticketNumber)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -237,7 +237,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var attachments = await GetJsonAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
+            var attachments = await GetJsonAsync<File[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
 
             return attachments;
         }

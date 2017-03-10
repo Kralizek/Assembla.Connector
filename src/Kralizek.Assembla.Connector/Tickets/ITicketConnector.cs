@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using Assembla.Documents;
+using Assembla.Files;
 using Assembla.Tags;
 using Assembla.Tickets.Associations;
 using Assembla.Tickets.Comments;
@@ -39,7 +39,7 @@ namespace Assembla.Tickets
 
         Task DeleteAsync(string spaceIdOrWikiName, int ticketNumber);
 
-        Task<IReadOnlyList<Document>> GetTicketAttachmentsAsync(string spaceIdOrWikiName, int ticketNumber);
+        Task<IReadOnlyList<File>> GetTicketAttachmentsAsync(string spaceIdOrWikiName, int ticketNumber);
 
         Task<IReadOnlyList<Tag>> GetTicketTagsAsync(string spaceIdOrWikiName, int ticketNumber);
 

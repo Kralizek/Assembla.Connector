@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Assembla;
 using Assembla.Spaces;
 using Assembla.Spaces.Tools;
+using Assembla.Users;
 using Microsoft.Extensions.Logging;
 
 namespace Sample.Assembla.Connector
@@ -18,27 +19,44 @@ namespace Sample.Assembla.Connector
                 await client.Spaces.Tools.AddAsync(testSpace.WikiName, toolType);
             }
 
-            return new DisposableSpace(client, testSpace);
-        }
+            var currentUser = await client.Users.GetAsync();
 
-        public class DisposableSpace : IDisposable
-        {
-            private readonly IAssemblaClient _client;
-            public Space Space { get; }
-
-            public DisposableSpace(IAssemblaClient client, Space testSpace)
-            {
-                if (client == null) throw new ArgumentNullException(nameof(client));
-                if (testSpace == null) throw new ArgumentNullException(nameof(testSpace));
-
-                _client = client;
-                Space = testSpace;
-            }
-
-            public void Dispose()
-            {
-                _client.Spaces.DeleteAsync(Space.WikiName).Wait();
-            }
+            return new DisposableSpace(client, testSpace, currentUser);
         }
     }
+
+    public class DisposableSpace : IDisposable
+    {
+        private readonly IAssemblaClient _client;
+
+        public Space Space { get; }
+
+        public User CurrentUser { get; }
+
+        public DisposableSpace(IAssemblaClient client, Space testSpace, User currentUser)
+        {
+            if (client == null)
+            {
+                throw new ArgumentNullException(nameof(client));
+            }
+            if (testSpace == null)
+            {
+                throw new ArgumentNullException(nameof(testSpace));
+            }
+            if (currentUser == null)
+            {
+                throw new ArgumentNullException(nameof(currentUser));
+            }
+
+            _client = client;
+            Space = testSpace;
+            CurrentUser = currentUser;
+        }
+
+        public void Dispose()
+        {
+            _client.Spaces.DeleteAsync(Space.WikiName).Wait();
+        }
+    }
+
 }

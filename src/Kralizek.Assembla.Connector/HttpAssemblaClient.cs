@@ -9,7 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using Assembla.Documents;
+using Assembla.Files;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -35,7 +35,8 @@ namespace Assembla
         public ITicketConnector Tickets => this;
 
         public ITagConnector Tags => this;
-        public IDocumentConnector Documents => this;
+
+        public IFileConnector Files => this;
 
         #region Http methods
 
