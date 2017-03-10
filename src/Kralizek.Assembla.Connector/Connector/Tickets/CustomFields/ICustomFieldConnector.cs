@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Kralizek.Assembla.Connector.Tickets.CustomFields
 {
@@ -16,20 +14,5 @@ namespace Kralizek.Assembla.Connector.Tickets.CustomFields
         Task UpdateAsync(string spaceIdOrWikiName, CustomField customField);
 
         Task DeleteAsync(string spaceIdOrWikiName, string customFieldId);
-    }
-
-    public class CustomFieldRequest
-    {
-        [JsonProperty("custom_field")]
-        public CustomField CustomField { get; }
-
-        public CustomFieldRequest(CustomField field)
-        {
-            if (field == null)
-            {
-                throw new ArgumentNullException(nameof(field));
-            }
-            CustomField = field;
-        }
     }
 }

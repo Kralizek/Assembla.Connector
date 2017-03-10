@@ -44,32 +44,4 @@ namespace Kralizek.Assembla.Connector.Tickets.Associations
             }
         }
     }
-
-    public enum TicketRelationship
-    {
-        Parent = 0,
-        Child = 1,
-        Related = 2,
-        Duplicate = 3,
-        Sibling = 4,
-        Story = 5,
-        Subtask = 6,
-        Dependent = 7,
-        Block = 8
-    }
-
-    public class TicketAssociationRequest
-    {
-        [JsonProperty("ticket_association")]
-        public TicketAssociation Association { get; }
-
-        public TicketAssociationRequest(TicketAssociation association)
-        {
-            if (association == null)
-            {
-                throw new ArgumentNullException(nameof(association));
-            }
-            Association = association;
-        }
-    }
 }

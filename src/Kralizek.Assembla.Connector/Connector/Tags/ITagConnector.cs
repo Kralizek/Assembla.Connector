@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Kralizek.Assembla.Connector.Tags
 {
@@ -22,16 +20,5 @@ namespace Kralizek.Assembla.Connector.Tags
         Task UpdateAsync(string spaceIdOrWikiName, Tag tag);
 
         Task DeleteAsync(string spaceIdOrWikiName, int tagId);
-    }
-
-    public class TagRequest
-    {
-        public TagRequest(Tag tag)
-        {
-            Tag = tag ?? throw new ArgumentNullException(nameof(tag));
-        }
-
-        [JsonProperty("tag")]
-        public Tag Tag { get; }
     }
 }

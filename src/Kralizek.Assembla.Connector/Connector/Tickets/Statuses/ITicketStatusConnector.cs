@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 
 namespace Kralizek.Assembla.Connector.Tickets.Statuses
 {
@@ -16,20 +14,5 @@ namespace Kralizek.Assembla.Connector.Tickets.Statuses
         Task UpdateAsync(string spaceIdOrWikiName, TicketStatus status);
 
         Task DeleteAsync(string spaceIdOrWikiName, string statusId);
-    }
-
-    public class TicketStatusRequest
-    {
-        [JsonProperty("status")]
-        public TicketStatus Status { get; }
-
-        public TicketStatusRequest(TicketStatus status)
-        {
-            if (status == null)
-            {
-                throw new ArgumentNullException(nameof(status));
-            }
-            Status = status;
-        }
     }
 }

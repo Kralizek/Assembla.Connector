@@ -93,45 +93,4 @@ namespace Kralizek.Assembla.Connector.Tickets
         [JsonProperty("is_support")]
         public bool? IsSupport { get; set; }
     }
-
-    public enum TicketPriority
-    {
-        Highest = 1,
-        High = 2,
-        Normal = 3,
-        Low = 4,
-        Lowest = 5
-    }
-
-    public enum PermissionType
-    {
-        Development = 0,
-        PrivateSupport = 1,
-        PublicSupport = 2
-    }
-
-    public enum TicketState
-    {
-        Closed = 0,
-        Open = 1
-    }
-
-    public enum HierarchyType
-    {
-        None = 0,
-        SubTask = 1,
-        Story = 2,
-        Epic = 3
-    }
-
-    public class TicketRequest
-    {
-        [JsonProperty("ticket")]
-        public Ticket Ticket { get; }
-
-        public TicketRequest(Ticket ticket)
-        {
-            Ticket = ticket ?? throw new ArgumentNullException(nameof(ticket));
-        }
-    }
 }

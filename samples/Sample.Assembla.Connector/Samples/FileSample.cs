@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Kralizek.Assembla;
 using Kralizek.Assembla.Connector;
 using Kralizek.Assembla.Connector.Files;
+using Kralizek.Assembla.Connector.Files.Content;
 using Kralizek.Assembla.Connector.Spaces.Tools;
 using Kralizek.Assembla.Connector.Tickets;
 using Kralizek.Assembla.Connector.Users;

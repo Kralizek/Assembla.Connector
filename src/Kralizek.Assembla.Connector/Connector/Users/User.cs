@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace Kralizek.Assembla.Connector.Users
 {
@@ -33,26 +31,5 @@ namespace Kralizek.Assembla.Connector.Users
 
         [JsonProperty("im2")]
         public InstantMessagingAccount InstantMessagingAccount2 { get; set; }
-    }
-
-    public class InstantMessagingAccount
-    {
-        [JsonProperty("type")]
-        public InstantMessagingAccountType Type { get; set; }
-
-        [JsonProperty("id")]
-        public string Account { get; set; }
-    }
-
-    [JsonConverter(typeof(StringEnumConverter))]
-    public enum InstantMessagingAccountType
-    {
-        [EnumMember(Value = "Skype")] Skype,
-        [EnumMember(Value = "Google Talk")] GoogleTalk,
-        [EnumMember(Value = "Jabber")] Jabber,
-        [EnumMember(Value = "Yahoo")] Yahoo,
-        [EnumMember(Value = "MSN")] Msn,
-        [EnumMember(Value = "ICQ")] Icq,
-        [EnumMember(Value = "AIM")] Aim,
     }
 }

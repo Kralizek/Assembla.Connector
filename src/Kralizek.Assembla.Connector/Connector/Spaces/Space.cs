@@ -93,39 +93,4 @@ namespace Kralizek.Assembla.Connector.Spaces
         [JsonProperty("last_payer_changed_at")]
         public DateTimeOffset? LastPayerChangedAt { get; set; }
     }
-
-    public enum PublicPermissions
-    {
-        Private = 0,
-        Public = 1
-    }
-
-    public enum TeamPermissions
-    {
-        ViewOnly = 1,
-        ViewAndEdit = 2,
-        AllPermissions = 3
-    }
-
-    public enum WatcherPermissions
-    {
-        CanAccess = 1
-    }
-
-    public enum TeamTabRoles
-    {
-        AvailableToAnyone = 0,
-        AvialableToWatchers = 10,
-        AvailableToUsers = 50,
-        AvailableToOwners = 90
-    }
-
-    public enum SpaceStatus
-    {
-        Proposed = 0,
-        Active = 1,
-        Archived = 2,
-        Proposed2 = 3,
-        Shared = 4
-    }
 }

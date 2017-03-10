@@ -21,11 +21,4 @@ namespace Kralizek.Assembla.Connector.Tags
         public TagState State { get; set; }
 
     }
-
-    public enum TagState
-    {
-        Proposed = 1,
-        Active = 2,
-        Hidden = 4
-    }
 }

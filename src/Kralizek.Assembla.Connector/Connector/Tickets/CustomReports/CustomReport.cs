@@ -13,10 +13,4 @@ namespace Kralizek.Assembla.Connector.Tickets.CustomReports
         [JsonIgnore]
         public CustomReportType ReportType { get; set; }
     }
-
-    public enum CustomReportType
-    {
-        TeamReport = 1,
-        UserReport = 2
-    }
 }

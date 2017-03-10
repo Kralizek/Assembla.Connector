@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Kralizek.Assembla.Connector.Files.Content;
 
 namespace Kralizek.Assembla.Connector.Files
 {
