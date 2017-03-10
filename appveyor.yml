@@ -21,6 +21,8 @@ build_script:
 
     Get-ChildItem .\src\ -Directory | %{ cd $_.FullName; dotnet pack -c $env:CONFIGURATION --no-build }
 
+test: off
+
 artifacts:
 
 - path: '**\*.nupkg'
