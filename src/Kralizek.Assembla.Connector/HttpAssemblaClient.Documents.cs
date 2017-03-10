@@ -32,7 +32,7 @@ namespace Assembla
 
             var queryParameters = GetDocumentQueryParameters(page, pageSize);
 
-            var documents = await _client.GetAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/documents", queryParameters).ConfigureAwait(false);
+            var documents = await GetAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/documents", queryParameters).ConfigureAwait(false);
 
             return documents;
         }
@@ -48,7 +48,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(documentId));
             }
 
-            var document = await _client.GetAsync<Document>($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}").ConfigureAwait(false);
+            var document = await GetAsync<Document>($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}").ConfigureAwait(false);
 
             return document;
         }
@@ -64,7 +64,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(documentId));
             }
 
-            var content = await _client.GetRawAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}/download").ConfigureAwait(false);
+            var content = await GetRawAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}/download").ConfigureAwait(false);
 
             return content;
         }
@@ -80,7 +80,24 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(fileContent));
             }
 
-            throw new NotSupportedException();
+            var content = CreateContent(fileContent, folderName, document);
+
+            var createdDocument = await PostAsync<Document>("https://bigfiles.assembla.com" + $"/v1/spaces/{spaceIdOrWikiName}/documents", content).ConfigureAwait(false);
+
+            return createdDocument;
+        }
+
+        private HttpContent CreateContent(IFileContent fileContent, string folderName, Document document = null)
+        {
+            MultipartFormDataContent content = new MultipartFormDataContent
+            {
+                {new ByteArrayContent(fileContent.Content), "document[file]", fileContent.FileName}
+            };
+            if (folderName != null)
+            {
+                content.Add(new StringContent(folderName), "folder_name");
+            }
+            return content;
         }
 
         async Task IDocumentConnector.UpdateAsync(string spaceIdOrWikiName, Document document)
@@ -98,7 +115,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(document.Id));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{document.Id}", new DocumentRequest(document)).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{document.Id}", new DocumentRequest(document)).ConfigureAwait(false);
         }
 
         async Task IDocumentConnector.UpdateAsync(string spaceOrWikiName, string documentId, IFileContent fileContent)
@@ -115,6 +132,7 @@ namespace Assembla
             {
                 throw new ArgumentNullException(nameof(fileContent));
             }
+
             throw new NotSupportedException();
         }
 
@@ -129,7 +147,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(documentId));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}").ConfigureAwait(false);
         }
     }
 }

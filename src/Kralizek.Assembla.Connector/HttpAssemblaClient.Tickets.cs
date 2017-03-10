@@ -57,7 +57,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets";
 
-            var tickets = await _client.GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
+            var tickets = await GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -71,7 +71,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/my_active";
 
-            var tickets = await _client.GetAsync<Ticket[]>(url).ConfigureAwait(false);
+            var tickets = await GetAsync<Ticket[]>(url).ConfigureAwait(false);
 
             return tickets;
         }
@@ -85,7 +85,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/my_followed";
 
-            var tickets = await _client.GetAsync<Ticket[]>(url).ConfigureAwait(false);
+            var tickets = await GetAsync<Ticket[]>(url).ConfigureAwait(false);
 
             return tickets;
         }
@@ -105,7 +105,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/milestone/{milestoneId}";
 
-            var tickets = await _client.GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
+            var tickets = await GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -121,7 +121,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/no_milestone";
 
-            var tickets = await _client.GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
+            var tickets = await GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -135,7 +135,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_reports";
 
-            var reports = await _client.GetAsync<CustomReportList>(url).ConfigureAwait(false);
+            var reports = await GetAsync<CustomReportList>(url).ConfigureAwait(false);
 
             var result = new List<CustomReport>();
             result.AddRange(reports.TeamReports.Select(c => new CustomReport{Id = c.Id, Title = c.Title, ReportType = CustomReportType.TeamReport}));
@@ -153,7 +153,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}";
 
-            var ticket = await _client.GetAsync<Ticket>(url).ConfigureAwait(false);
+            var ticket = await GetAsync<Ticket>(url).ConfigureAwait(false);
 
             return ticket;
         }
@@ -171,7 +171,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/id/{ticketId}";
 
-            var ticket = await _client.GetAsync<Ticket>(url).ConfigureAwait(false);
+            var ticket = await GetAsync<Ticket>(url).ConfigureAwait(false);
 
             return ticket;
         }
@@ -189,7 +189,7 @@ namespace Assembla
 
             var uri = $"/v1/spaces/{spaceIdOrWikiName}/tickets";
 
-            var createdTicket = await _client.PostJsonAsync<TicketRequest, Ticket>(uri, new TicketRequest(newTicket)).ConfigureAwait(false);
+            var createdTicket = await PostJsonAsync<TicketRequest, Ticket>(uri, new TicketRequest(newTicket)).ConfigureAwait(false);
 
             return createdTicket;
         }
@@ -209,7 +209,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticket.Number));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticket.Number}", new TicketRequest(ticket)).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticket.Number}", new TicketRequest(ticket)).ConfigureAwait(false);
         }
 
         async Task ITicketConnector.DeleteAsync(string spaceIdOrWikiName, int ticketNumber)
@@ -223,7 +223,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}").ConfigureAwait(false);
         }
 
         async Task<IReadOnlyList<Document>> ITicketConnector.GetTicketAttachmentsAsync(string spaceIdOrWikiName, int ticketNumber)
@@ -237,7 +237,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var attachments = await _client.GetAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
+            var attachments = await GetAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
 
             return attachments;
         }
@@ -253,7 +253,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var tags = await _client.GetAsync<Tag[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/tags").ConfigureAwait(false);
+            var tags = await GetAsync<Tag[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/tags").ConfigureAwait(false);
 
             return tags;
         }
@@ -271,7 +271,7 @@ namespace Assembla
 
             var queryParameters = GetTicketQueryParameters(page: page, pageSize: pageSize);
 
-            var tickets = await _client.GetAsync<Ticket[]>($"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}/tickets", queryParameters).ConfigureAwait(false);
+            var tickets = await GetAsync<Ticket[]>($"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}/tickets", queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -298,7 +298,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var associations = await _client.GetAsync<TicketAssociation[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations").ConfigureAwait(false);
+            var associations = await GetAsync<TicketAssociation[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations").ConfigureAwait(false);
 
             return associations;
         }
@@ -318,7 +318,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var association = await _client.GetAsync<TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
+            var association = await GetAsync<TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
 
             return association;
         }
@@ -338,7 +338,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var createdAssociation = await _client.PostJsonAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
+            var createdAssociation = await PostJsonAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
 
             return createdAssociation;
         }
@@ -362,7 +362,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(association.Id));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{association.Id}", new TicketAssociationRequest(association)).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{association.Id}", new TicketAssociationRequest(association)).ConfigureAwait(false);
         }
 
         async Task ITicketAssociationConnector.DeleteAsync(string spaceIdOrWikiName, int ticketNumber, string associationId)
@@ -380,37 +380,37 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
         }
     }
 
     public partial class HttpAssemblaClient : ITicketCommentConnector
     {
-        public async Task<IReadOnlyList<Comment>> GetAllInTicketAsync(string spaceIdOrWikiName, int ticketNumber)
+        async Task<IReadOnlyList<Comment>> ITicketCommentConnector.GetAllInTicketAsync(string spaceIdOrWikiName, int ticketNumber)
         {
             if (spaceIdOrWikiName == null)
             {
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var comments = await _client.GetAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
+            var comments = await GetAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
 
             return comments;
         }
 
-        public async Task<Comment> GetAsync(string spaceIdOrWikiName, int ticketNumber, int commentId)
+        async Task<Comment> ITicketCommentConnector.GetAsync(string spaceIdOrWikiName, int ticketNumber, int commentId)
         {
             if (spaceIdOrWikiName == null)
             {
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var comment = await _client.GetAsync<Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{commentId}").ConfigureAwait(false);
+            var comment = await GetAsync<Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{commentId}").ConfigureAwait(false);
 
             return comment;
         }
 
-        public async Task<Comment> CreateAsync(string spaceIdOrWikiName, int ticketNumber, Comment comment)
+        async Task<Comment> ITicketCommentConnector.CreateAsync(string spaceIdOrWikiName, int ticketNumber, Comment comment)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -421,12 +421,12 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            var createdComment = await _client.PostJsonAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
+            var createdComment = await PostJsonAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
 
             return createdComment;
         }
 
-        public async Task UpdateAsync(string spaceIdOrWikiName, int ticketNumber, Comment comment)
+        async Task ITicketCommentConnector.UpdateAsync(string spaceIdOrWikiName, int ticketNumber, Comment comment)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -441,7 +441,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(comment.Id));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{comment.Id}", new CommentRequest(comment)).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{comment.Id}", new CommentRequest(comment)).ConfigureAwait(false);
         }
     }
 
@@ -454,7 +454,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var statuses = await _client.GetAsync<TicketStatus[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses").ConfigureAwait(false);
+            var statuses = await GetAsync<TicketStatus[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses").ConfigureAwait(false);
 
             return statuses;
         }
@@ -470,7 +470,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(statusId));
             }
 
-            var status = await _client.GetAsync<TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
+            var status = await GetAsync<TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
 
             return status;
         }
@@ -486,7 +486,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(status));
             }
 
-            var createdStatus = await _client.PostJsonAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
+            var createdStatus = await PostJsonAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
 
             return createdStatus;
         }
@@ -506,7 +506,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(status.Id));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{status.Id}", new TicketStatusRequest(status)).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{status.Id}", new TicketStatusRequest(status)).ConfigureAwait(false);
         }
 
         async Task ITicketStatusConnector.DeleteAsync(string spaceIdOrWikiName, string statusId)
@@ -520,7 +520,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(statusId));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
         }
     }
 
@@ -533,7 +533,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var fields = await _client.GetAsync<CustomField[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields").ConfigureAwait(false);
+            var fields = await GetAsync<CustomField[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields").ConfigureAwait(false);
 
             return fields;
         }
@@ -549,7 +549,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customFieldId));
             }
             
-            var field = await _client.GetAsync<CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
+            var field = await GetAsync<CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
 
             return field;
         }
@@ -565,7 +565,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customField));
             }
 
-            var createdField = await _client.PostJsonAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
+            var createdField = await PostJsonAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
 
             return createdField;
         }
@@ -585,7 +585,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customField.Id));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customField.Id}", customField).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customField.Id}", customField).ConfigureAwait(false);
         }
 
         async Task ICustomFieldConnector.DeleteAsync(string spaceIdOrWikiName, string customFieldId)
@@ -600,7 +600,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customFieldId));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
         }
     }
 }

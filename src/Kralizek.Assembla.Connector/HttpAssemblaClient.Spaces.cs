@@ -10,7 +10,7 @@ namespace Assembla
     {
         async Task<IReadOnlyList<Space>> ISpaceConnector.GetAllAsync()
         {
-            var spaces = await _client.GetAsync<Space[]>("/v1/spaces").ConfigureAwait(false);
+            var spaces = await GetAsync<Space[]>("/v1/spaces").ConfigureAwait(false);
 
             return spaces;
         }
@@ -22,7 +22,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var space = await _client.GetAsync<Space>($"/v1/spaces/{spaceIdOrWikiName}").ConfigureAwait(false);
+            var space = await GetAsync<Space>($"/v1/spaces/{spaceIdOrWikiName}").ConfigureAwait(false);
 
             return space;
         }
@@ -34,7 +34,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(space));
             }
 
-            var newSpace = await _client.PostJsonAsync<SpaceRequest, Space>("/v1/spaces", new SpaceRequest(space)).ConfigureAwait(false);
+            var newSpace = await PostJsonAsync<SpaceRequest, Space>("/v1/spaces", new SpaceRequest(space)).ConfigureAwait(false);
 
             return newSpace;
         }
@@ -46,7 +46,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(space));
             }
 
-            await _client.PutAsync($"/v1/spaces/{space.WikiName}", space).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{space.WikiName}", space).ConfigureAwait(false);
         }
 
         async Task ISpaceConnector.DeleteAsync(string spaceIdOrWikiName)
@@ -56,7 +56,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}").ConfigureAwait(false);
         }
 
         async Task<Space> ISpaceConnector.CopyAsync(string spaceIdOrWikiName, Space space)
@@ -70,7 +70,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(space));
             }
 
-            var copiedSpace = await _client.PostJsonAsync<SpaceRequest, Space>($"/v1/spaces/{spaceIdOrWikiName}/copy", new SpaceRequest(space)).ConfigureAwait(false);
+            var copiedSpace = await PostJsonAsync<SpaceRequest, Space>($"/v1/spaces/{spaceIdOrWikiName}/copy", new SpaceRequest(space)).ConfigureAwait(false);
 
             return copiedSpace;
         }
@@ -87,7 +87,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var tools = await _client.GetAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools").ConfigureAwait(false);
+            var tools = await GetAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools").ConfigureAwait(false);
 
             return tools;
         }
@@ -99,7 +99,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var tools = await _client.GetAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/repo").ConfigureAwait(false);
+            var tools = await GetAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/repo").ConfigureAwait(false);
 
             return tools;
         }
@@ -115,14 +115,14 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(toolIdOrName));
             }
 
-            var tool = await _client.GetAsync<Tool>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolIdOrName}").ConfigureAwait(false);
+            var tool = await GetAsync<Tool>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolIdOrName}").ConfigureAwait(false);
 
             return tool;
         }
 
         async Task<Tool> IToolConnector.AddAsync(string spaceIdOrWikiName, ToolType toolType)
         {
-            var tool = await _client.PostCommandAsync<Tool>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolType:D}/add").ConfigureAwait(false);
+            var tool = await PostCommandAsync<Tool>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolType:D}/add").ConfigureAwait(false);
 
             return tool;
         }
@@ -142,7 +142,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(tool.Id));
             }
 
-            await _client.PutAsync($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{tool.Id}", tool).ConfigureAwait(false);
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{tool.Id}", tool).ConfigureAwait(false);
         }
 
         async Task IToolConnector.DeleteAsync(string spaceIdOrWikiName, string toolIdOrName)
@@ -156,7 +156,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(toolIdOrName));
             }
 
-            await _client.DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolIdOrName}").ConfigureAwait(false);
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/space_tools/{toolIdOrName}").ConfigureAwait(false);
 
         }
     }
