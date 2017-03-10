@@ -6,6 +6,7 @@
     <Authors>Renato Golia</Authors>
     <Description>A low level library to access Assembla REST API</Description>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <Version>0.1.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
