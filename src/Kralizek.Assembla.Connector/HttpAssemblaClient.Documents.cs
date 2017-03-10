@@ -32,7 +32,7 @@ namespace Assembla
 
             var queryParameters = GetDocumentQueryParameters(page, pageSize);
 
-            var documents = await GetAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/documents", queryParameters).ConfigureAwait(false);
+            var documents = await GetJsonAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/documents", queryParameters).ConfigureAwait(false);
 
             return documents;
         }
@@ -48,7 +48,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(documentId));
             }
 
-            var document = await GetAsync<Document>($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}").ConfigureAwait(false);
+            var document = await GetJsonAsync<Document>($"/v1/spaces/{spaceIdOrWikiName}/documents/{documentId}").ConfigureAwait(false);
 
             return document;
         }
@@ -87,20 +87,43 @@ namespace Assembla
             return createdDocument;
         }
 
-        private HttpContent CreateContent(IFileContent fileContent, string folderName, Document document = null)
+        private HttpContent CreateContent(IFileContent fileContent, string folderName = null, Document document = null)
         {
-            MultipartFormDataContent content = new MultipartFormDataContent
+            var content = new MultipartFormDataContent
             {
-                {new ByteArrayContent(fileContent.Content), "document[file]", fileContent.FileName}
+                {fileContent.ToContent(), "document[file]", fileContent.FileName}
             };
             if (folderName != null)
             {
                 content.Add(new StringContent(folderName), "folder_name");
             }
+            if (document != null)
+            {
+                if (document.IsAttachedToTicket() || document.IsAttachedToMessage() || document.IsAttachedToMilestone())
+                {
+                    content.Add(new StringContent(document.AttachableType.Value.ToString("G")), "document[attachable_type]");
+                    content.Add(new StringContent(document.AttachableId.Value.ToString()), "document[attachable_id]");
+                }
+
+                if (document.Description != null)
+                {
+                    content.Add(new StringContent(document.Description), "document[description]");
+                }
+
+                if (document.FileName != null)
+                {
+                    content.Add(new StringContent(document.FileName), "document[filename]");
+                }
+
+                if (document.Name != null)
+                {
+                    content.Add(new StringContent(document.FileName), "document[name]");
+                }
+            }
             return content;
         }
 
-        async Task IDocumentConnector.UpdateAsync(string spaceIdOrWikiName, Document document)
+        async Task IDocumentConnector.UpdateAsync(string spaceIdOrWikiName, Document document, IFileContent fileContent)
         {
             if (spaceIdOrWikiName == null)
             {
@@ -114,26 +137,13 @@ namespace Assembla
             {
                 throw new ArgumentNullException(nameof(document.Id));
             }
-
-            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/documents/{document.Id}", new DocumentRequest(document)).ConfigureAwait(false);
-        }
-
-        async Task IDocumentConnector.UpdateAsync(string spaceOrWikiName, string documentId, IFileContent fileContent)
-        {
-            if (spaceOrWikiName == null)
-            {
-                throw new ArgumentNullException(nameof(spaceOrWikiName));
-            }
-            if (documentId == null)
-            {
-                throw new ArgumentNullException(nameof(documentId));
-            }
             if (fileContent == null)
             {
                 throw new ArgumentNullException(nameof(fileContent));
             }
 
-            throw new NotSupportedException();
+            var content = CreateContent(fileContent, document: document);
+            await PutAsync("https://bigfiles.assembla.com" + $"/v1/spaces/{spaceIdOrWikiName}/documents/{document.Id}", content).ConfigureAwait(false);
         }
 
         async Task IDocumentConnector.DeleteAsync(string spaceIdOrWikiName, string documentId)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Assembla.Documents
@@ -13,16 +14,14 @@ namespace Assembla.Documents
 
         Task<Document> CreateAsync(string spaceIdOrWikiName, IFileContent fileContent, Document document = null, string folderName = null);
 
-        Task UpdateAsync(string spaceIdOrWikiName, Document document);
-
-        Task UpdateAsync(string spaceOrWikiName, string documentId, IFileContent fileContent);
+        Task UpdateAsync(string spaceOrWikiName, Document document, IFileContent fileContent = null);
 
         Task DeleteAsync(string spaceIdOrWikiName, string documentId);
     }
 
     public interface IFileContent
     {
-        byte[] Content { get; }
+        HttpContent ToContent();
 
         string FileName { get; }
     }

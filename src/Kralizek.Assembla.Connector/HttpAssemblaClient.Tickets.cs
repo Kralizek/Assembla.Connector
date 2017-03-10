@@ -57,7 +57,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets";
 
-            var tickets = await GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
+            var tickets = await GetJsonAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -71,7 +71,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/my_active";
 
-            var tickets = await GetAsync<Ticket[]>(url).ConfigureAwait(false);
+            var tickets = await GetJsonAsync<Ticket[]>(url).ConfigureAwait(false);
 
             return tickets;
         }
@@ -85,7 +85,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/my_followed";
 
-            var tickets = await GetAsync<Ticket[]>(url).ConfigureAwait(false);
+            var tickets = await GetJsonAsync<Ticket[]>(url).ConfigureAwait(false);
 
             return tickets;
         }
@@ -105,7 +105,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/milestone/{milestoneId}";
 
-            var tickets = await GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
+            var tickets = await GetJsonAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -121,7 +121,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/no_milestone";
 
-            var tickets = await GetAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
+            var tickets = await GetJsonAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -135,7 +135,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_reports";
 
-            var reports = await GetAsync<CustomReportList>(url).ConfigureAwait(false);
+            var reports = await GetJsonAsync<CustomReportList>(url).ConfigureAwait(false);
 
             var result = new List<CustomReport>();
             result.AddRange(reports.TeamReports.Select(c => new CustomReport{Id = c.Id, Title = c.Title, ReportType = CustomReportType.TeamReport}));
@@ -153,7 +153,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}";
 
-            var ticket = await GetAsync<Ticket>(url).ConfigureAwait(false);
+            var ticket = await GetJsonAsync<Ticket>(url).ConfigureAwait(false);
 
             return ticket;
         }
@@ -171,7 +171,7 @@ namespace Assembla
 
             var url = $"/v1/spaces/{spaceIdOrWikiName}/tickets/id/{ticketId}";
 
-            var ticket = await GetAsync<Ticket>(url).ConfigureAwait(false);
+            var ticket = await GetJsonAsync<Ticket>(url).ConfigureAwait(false);
 
             return ticket;
         }
@@ -189,7 +189,7 @@ namespace Assembla
 
             var uri = $"/v1/spaces/{spaceIdOrWikiName}/tickets";
 
-            var createdTicket = await PostJsonAsync<TicketRequest, Ticket>(uri, new TicketRequest(newTicket)).ConfigureAwait(false);
+            var createdTicket = await PostAsync<TicketRequest, Ticket>(uri, new TicketRequest(newTicket)).ConfigureAwait(false);
 
             return createdTicket;
         }
@@ -237,7 +237,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var attachments = await GetAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
+            var attachments = await GetJsonAsync<Document[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
 
             return attachments;
         }
@@ -253,7 +253,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var tags = await GetAsync<Tag[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/tags").ConfigureAwait(false);
+            var tags = await GetJsonAsync<Tag[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/tags").ConfigureAwait(false);
 
             return tags;
         }
@@ -271,7 +271,7 @@ namespace Assembla
 
             var queryParameters = GetTicketQueryParameters(page: page, pageSize: pageSize);
 
-            var tickets = await GetAsync<Ticket[]>($"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}/tickets", queryParameters).ConfigureAwait(false);
+            var tickets = await GetJsonAsync<Ticket[]>($"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}/tickets", queryParameters).ConfigureAwait(false);
 
             return tickets;
         }
@@ -298,7 +298,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var associations = await GetAsync<TicketAssociation[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations").ConfigureAwait(false);
+            var associations = await GetJsonAsync<TicketAssociation[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations").ConfigureAwait(false);
 
             return associations;
         }
@@ -318,7 +318,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var association = await GetAsync<TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
+            var association = await GetJsonAsync<TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations/{associationId}").ConfigureAwait(false);
 
             return association;
         }
@@ -338,7 +338,7 @@ namespace Assembla
                 throw new ArgumentOutOfRangeException(nameof(ticketNumber));
             }
 
-            var createdAssociation = await PostJsonAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
+            var createdAssociation = await PostAsync<TicketAssociationRequest, TicketAssociation>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations", new TicketAssociationRequest(association)).ConfigureAwait(false);
 
             return createdAssociation;
         }
@@ -393,7 +393,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var comments = await GetAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
+            var comments = await GetJsonAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
 
             return comments;
         }
@@ -405,7 +405,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var comment = await GetAsync<Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{commentId}").ConfigureAwait(false);
+            var comment = await GetJsonAsync<Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments/{commentId}").ConfigureAwait(false);
 
             return comment;
         }
@@ -421,7 +421,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(comment));
             }
 
-            var createdComment = await PostJsonAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
+            var createdComment = await PostAsync<CommentRequest, Comment>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", new CommentRequest(comment)).ConfigureAwait(false);
 
             return createdComment;
         }
@@ -454,7 +454,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var statuses = await GetAsync<TicketStatus[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses").ConfigureAwait(false);
+            var statuses = await GetJsonAsync<TicketStatus[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses").ConfigureAwait(false);
 
             return statuses;
         }
@@ -470,7 +470,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(statusId));
             }
 
-            var status = await GetAsync<TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
+            var status = await GetJsonAsync<TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses/{statusId}").ConfigureAwait(false);
 
             return status;
         }
@@ -486,7 +486,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(status));
             }
 
-            var createdStatus = await PostJsonAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
+            var createdStatus = await PostAsync<TicketStatusRequest, TicketStatus>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses", new TicketStatusRequest(status)).ConfigureAwait(false);
 
             return createdStatus;
         }
@@ -533,7 +533,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var fields = await GetAsync<CustomField[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields").ConfigureAwait(false);
+            var fields = await GetJsonAsync<CustomField[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields").ConfigureAwait(false);
 
             return fields;
         }
@@ -549,7 +549,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customFieldId));
             }
             
-            var field = await GetAsync<CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
+            var field = await GetJsonAsync<CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields/{customFieldId}").ConfigureAwait(false);
 
             return field;
         }
@@ -565,7 +565,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(customField));
             }
 
-            var createdField = await PostJsonAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
+            var createdField = await PostAsync<CustomFieldRequest, CustomField>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields", new CustomFieldRequest(customField)).ConfigureAwait(false);
 
             return createdField;
         }

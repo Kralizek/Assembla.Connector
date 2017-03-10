@@ -36,7 +36,7 @@ namespace Assembla
 
             var queryParameters = GetMilestoneQueryParameters(page: page, pageSize: pageSize, sort: sort);
 
-            var milestones = await GetAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/all", queryParameters).ConfigureAwait(false);
+            var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/all", queryParameters).ConfigureAwait(false);
 
             return milestones;
         }
@@ -50,7 +50,7 @@ namespace Assembla
 
             var queryParameters = GetMilestoneQueryParameters(page: page, pageSize: pageSize, sort: sort);
 
-            var milestones = await GetAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/upcoming", queryParameters).ConfigureAwait(false);
+            var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/upcoming", queryParameters).ConfigureAwait(false);
 
             return milestones;
         }
@@ -64,7 +64,7 @@ namespace Assembla
 
             var queryParameters = GetMilestoneQueryParameters(page: page, pageSize: pageSize, sort: sort);
 
-            var milestones = await GetAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/completed", queryParameters).ConfigureAwait(false);
+            var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/completed", queryParameters).ConfigureAwait(false);
 
             return milestones;
         }
@@ -78,7 +78,7 @@ namespace Assembla
 
             var queryParameters = GetMilestoneQueryParameters(page: page, pageSize: pageSize, sort: sort);
 
-            var milestones = await GetAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/release_notes", queryParameters).ConfigureAwait(false);
+            var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/release_notes", queryParameters).ConfigureAwait(false);
 
             return milestones;
         }
@@ -94,7 +94,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(milestoneId));
             }
 
-            var milestone = await GetAsync<Milestone>($"/v1/spaces/{spaceIdOrWikiName}/milestones/{milestoneId}").ConfigureAwait(false);
+            var milestone = await GetJsonAsync<Milestone>($"/v1/spaces/{spaceIdOrWikiName}/milestones/{milestoneId}").ConfigureAwait(false);
 
             return milestone;
         }
@@ -110,7 +110,7 @@ namespace Assembla
                 throw new ArgumentNullException(nameof(milestone));
             }
 
-            var createdMilestone = await PostJsonAsync<MilestoneRequest, Milestone>($"/v1/spaces/{spaceIdOrWikiName}/milestones", new MilestoneRequest(milestone)).ConfigureAwait(false);
+            var createdMilestone = await PostAsync<MilestoneRequest, Milestone>($"/v1/spaces/{spaceIdOrWikiName}/milestones", new MilestoneRequest(milestone)).ConfigureAwait(false);
 
             return createdMilestone;
         }

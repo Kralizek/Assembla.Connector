@@ -66,6 +66,13 @@ namespace Assembla.Documents
 
         [JsonProperty("url")]
         public string Url { get; set; }
+
+        public bool IsAttachedToTicket() => AttachableType.HasValue && AttachableType.Value == Documents.AttachableType.Ticket && AttachableId.HasValue;
+
+        public bool IsAttachedToMessage() => AttachableType.HasValue && AttachableType.Value == Documents.AttachableType.Flow && AttachableId.HasValue;
+
+        public bool IsAttachedToMilestone() => AttachableType.HasValue && AttachableType.Value == Documents.AttachableType.Milestone && AttachableId.HasValue;
+
     }
 
     [JsonConverter(typeof(StringEnumConverter))]

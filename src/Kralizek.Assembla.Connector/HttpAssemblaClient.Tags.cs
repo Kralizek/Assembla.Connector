@@ -16,7 +16,7 @@ namespace Assembla
             
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
 
-            var tags = await GetAsync<Tag[]>(uri).ConfigureAwait(false);
+            var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
             return tags;
         }
@@ -30,7 +30,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/active";
 
-            var tags = await GetAsync<Tag[]>(uri).ConfigureAwait(false);
+            var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
             return tags;
         }
@@ -44,7 +44,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/proposed";
 
-            var tags = await GetAsync<Tag[]>(uri).ConfigureAwait(false);
+            var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
             return tags;
         }
@@ -58,7 +58,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/hidden";
 
-            var tags = await GetAsync<Tag[]>(uri).ConfigureAwait(false);
+            var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
             return tags;
         }
@@ -72,7 +72,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}";
 
-            var tag = await GetAsync<Tag>(uri).ConfigureAwait(false);
+            var tag = await GetJsonAsync<Tag>(uri).ConfigureAwait(false);
 
             return tag;
         }
@@ -90,7 +90,7 @@ namespace Assembla
 
             string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
 
-            var newTag = await PostJsonAsync<TagRequest, Tag>(uri, new TagRequest(tag)).ConfigureAwait(false);
+            var newTag = await PostAsync<TagRequest, Tag>(uri, new TagRequest(tag)).ConfigureAwait(false);
 
             return newTag;
         }
