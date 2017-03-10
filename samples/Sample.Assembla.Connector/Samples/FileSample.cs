@@ -29,7 +29,7 @@ namespace Sample.Assembla.Connector.Samples
             const string fileContent = "HelloWorld";
             const string fileName = "hello-world.txt";
 
-            var uploadedFile = await client.Files.CreateAsync(test.Space.WikiName, FileContent.FromString(fileContent, fileName));
+            var uploadedFile = await client.Files.CreateAsync(test.Space.WikiName, FileContent.FromString(fileContent, fileName: fileName));
 
             uploadedFile.FileName.ShouldBe(fileName);
             uploadedFile.CreatedBy.ShouldBe(test.CurrentUser.Id);
@@ -37,7 +37,7 @@ namespace Sample.Assembla.Connector.Samples
 
         private static async Task TestWithExtraData(IAssemblaClient client, DisposableSpace test)
         {
-            var content = FileContent.FromObjectAsJson(test.CurrentUser, "user.txt");
+            var content = FileContent.FromObjectAsJson(test.CurrentUser, fileName: "user.txt");
             var document = new File { Name = "Current User", FileName = "currentUser.txt", Description = "Some text to describe the file" };
             var uploadedFile = await client.Files.CreateAsync(test.Space.WikiName, content, document);
 
@@ -58,7 +58,7 @@ namespace Sample.Assembla.Connector.Samples
 
             const string fileContent = "HelloWorld";
             const string fileName = "hello-world.txt";
-            var content = FileContent.FromString(fileContent, fileName);
+            var content = FileContent.FromString(fileContent, fileName: fileName);
             var document = new File { AttachableId = ticket.Id, AttachableType = AttachableType.Ticket };
 
             var uploadedFile = await client.Files.CreateAsync(test.Space.WikiName, content, document);
