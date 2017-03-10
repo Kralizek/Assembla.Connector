@@ -1,0 +1,18 @@
+version: {build}
+
+image: Visual Studio 2017 RC
+
+configuration: Release
+
+platform: Any CPU
+
+build_script:
+
+- ps: >-
+    dotnet restore
+    dotnet build -c $env:CONFIGURATION --no-dependencies
+    dotnet pack -c $env:CONFIGURATION --no-build
+
+artifacts:
+
+- path: '**\*.nupkg'
