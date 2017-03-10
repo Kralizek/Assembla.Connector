@@ -9,6 +9,11 @@ platform: Any CPU
 build_script:
 
 - ps: >-
+    cd src\Kralizek.Assembla.Connector
+    dotnet restore
+    dotnet build -c $env:CONFIGURATION --no-dependencies
+    dotnet pack -c $env:CONFIGURATION --no-build
+    
     dotnet restore
     dotnet build -c $env:CONFIGURATION --no-dependencies
     dotnet pack -c $env:CONFIGURATION --no-build
