@@ -9,13 +9,17 @@ platform: Any CPU
 build_script:
 
 - ps: >-
-    cd src\Kralizek.Assembla.Connector
+    $currentPath = Get-Location
 
     dotnet restore
 
     dotnet build -c $env:CONFIGURATION --no-incremental
 
-    dotnet pack -c $env:CONFIGURATION --no-build
+    Get-ChildItem .\tests\ -Directory | %{ cd $_.FullName; dotnet test }
+
+    Set-Location $currentPath
+
+    Get-ChildItem .\src\ -Directory | %{ cd $_.FullName; dotnet pack -c $env:CONFIGURATION --no-build }
 
 artifacts:
 
