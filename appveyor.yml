@@ -19,7 +19,7 @@ build_script:
 
     Set-Location $currentPath
 
-    Get-ChildItem .\src\ -Directory | %{ cd $_.FullName; dotnet pack -c $env:CONFIGURATION --no-build }
+    Get-ChildItem src\**\*.csproj -Recurse | % { dotnet pack $_.FullName -c Release  }
 
 test: off
 
