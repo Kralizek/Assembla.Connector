@@ -1,18 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard1.3</TargetFramework>
+    <TargetFrameworks>netstandard1.3;net46</TargetFrameworks>
     <RootNamespace>Kralizek.Assembla</RootNamespace>
     <PackageId>Kralizek.Assembla.Connector</PackageId>
     <Authors>Renato Golia</Authors>
     <Description>A .NET Standard wrapper for Assembla REST API.</Description>
-    <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
+    <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
     <PackageProjectUrl>https://github.com/Kralizek/Assembla.Connector</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Kralizek/Assembla.Connector/master/LICENSE</PackageLicenseUrl>
-    <Version>0.1.1</Version>
+    <Version>0.1.2</Version>
     <PackageTags>assembla;dotnet-core;dotnet-standard;rest-api;netstandard</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
     <PackageReference Include="Kralizek.Extensions.Logging" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net46' ">
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 </Project>
