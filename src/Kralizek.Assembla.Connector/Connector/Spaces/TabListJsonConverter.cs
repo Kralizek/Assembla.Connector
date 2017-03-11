@@ -22,7 +22,7 @@ namespace Kralizek.Assembla.Connector.Spaces
 
             if (string.IsNullOrEmpty(value))
             {
-                return Array.Empty<string>();
+                return new string[0];
             }
 
             var rows = value.Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries).Skip(1).Select(s => s.Substring(2)).ToArray();
