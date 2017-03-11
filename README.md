@@ -42,6 +42,28 @@ Here is a list of sections of the exposed functionalities.
 - [ ] Tasks
 - [ ] Portfolio
 
+### Example
+
+Here is a small example of how to query for the list of all the spaces available to the current user
+```csharp
+ILoggerFactory loggerFactory = new LoggerFactory();
+
+HttpClient client = new HttpClient { BaseAddress = new Uri(@"https://api.assembla.com") };
+client.DefaultRequestHeaders.Add("X-Api-Key", "yourApiKey");
+client.DefaultRequestHeaders.Add("X-Api-Secret", "yourSecretKey");
+
+IAssemblaClient assembla = new HttpAssemblaClient(client, loggerFactory.CreateLogger<HttpAssemblaClient>());
+
+var spaces = await assembla.Spaces.GetAllAsync();
+
+spaces.Select(s => new {s.Id, s.WikiName, s.Name}).Dump();
+```
+You can execute this script in [LinqPad](http://www.linqpad.net/) by adding the following packages
+* `Kralizek.Assembla.Connector`
+* `Microsoft.Extensions.Logging`
+
+or by downloading [this script](https://github.com/Kralizek/Assembla.Connector/blob/master/samples/LinqPad/list-your-spaces.linq).
+
 ## Versioning
 This repository uses the [Semantic Versioning 2.0.0](http://semver.org/spec/v2.0.0.html).
 The packages whose major version is 0 are to be considered in their initial development phase, therefore their public programming interface cannot be considered stable.
