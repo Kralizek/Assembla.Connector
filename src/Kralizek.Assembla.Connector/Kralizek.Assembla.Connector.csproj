@@ -4,9 +4,12 @@
     <RootNamespace>Kralizek.Assembla</RootNamespace>
     <PackageId>Kralizek.Assembla.Connector</PackageId>
     <Authors>Renato Golia</Authors>
-    <Description>A low level library to access Assembla REST API</Description>
+    <Description>A .NET Standard wrapper for Assembla REST API.</Description>
     <NetStandardImplicitPackageVersion>1.6.0</NetStandardImplicitPackageVersion>
-    <Version>0.1.0</Version>
+    <PackageProjectUrl>https://github.com/Kralizek/Assembla.Connector</PackageProjectUrl>
+    <PackageLicenseUrl>https://raw.githubusercontent.com/Kralizek/Assembla.Connector/master/LICENSE</PackageLicenseUrl>
+    <Version>0.1.1</Version>
+    <PackageTags>assembla;dotnet-core;dotnet-standard;rest-api;netstandard</PackageTags>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
