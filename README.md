@@ -42,7 +42,7 @@ Here is a list of sections of the exposed functionalities.
 - [ ] Tasks
 - [ ] Portfolio
 
-### Versioning
+## Versioning
 This repository uses the [Semantic Versioning 2.0.0](http://semver.org/spec/v2.0.0.html).
 The packages whose major version is 0 are to be considered in their initial development phase, therefore their public programming interface cannot be considered stable.
 
