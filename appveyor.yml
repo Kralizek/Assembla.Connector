@@ -6,6 +6,10 @@ configuration: Release
 
 platform: Any CPU
 
+only_commits:
+  files:
+    - src/
+
 build_script:
 
 - ps: >-
