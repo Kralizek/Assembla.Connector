@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="microsoft.Extensions.Configuration" Version="1.1.1" />
     <PackageReference Include="microsoft.Extensions.Configuration.EnvironmentVariables" Version="1.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="1.1.1" />
     <PackageReference Include="microsoft.Extensions.DependencyInjection" Version="1.1.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="1.1.1" />
     <PackageReference Include="microsoft.Extensions.Logging.Console" Version="1.1.1" />
@@ -19,6 +20,12 @@
     <PackageReference Include="microsoft.Extensions.Options" Version="1.1.1" />
     <PackageReference Include="microsoft.Extensions.Options.ConfigurationExtensions" Version="1.1.1" />
     <PackageReference Include="Shouldly" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

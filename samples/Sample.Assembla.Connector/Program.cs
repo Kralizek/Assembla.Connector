@@ -20,7 +20,9 @@ namespace Sample.Assembla.Connector
 
         static async Task MainAsync()
         {
-            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder().AddEnvironmentVariables();
+            IConfigurationBuilder configurationBuilder = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", true)
+                .AddEnvironmentVariables();
 
             var configuration = configurationBuilder.Build();
 
