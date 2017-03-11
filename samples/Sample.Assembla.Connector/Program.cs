@@ -30,15 +30,7 @@ namespace Sample.Assembla.Connector
             services.AddLogging();
             services.AddOptions();
 
-            services.Configure<HttpClientSettings>(configuration.GetSection("Assembla"));
-
-            services.AddSingleton(sp =>
-            {
-                var settings = sp.GetRequiredService<IOptions<HttpClientSettings>>();
-                return CreateHttpClient(settings.Value);
-            });
-
-            services.AddTransient<IAssemblaClient, HttpAssemblaClient>();
+            services.AddAssemblaWithSecretKey(configuration.GetSection("Assembla"));
 
             services
                 .AddTransient<ISample, SpacesSimpleSample>()
@@ -85,21 +77,6 @@ namespace Sample.Assembla.Connector
 
             Console.WriteLine("Execution completed. Press ENTER to exit...");
             Console.ReadLine();
-        }
-
-        static HttpClient CreateHttpClient(HttpClientSettings settings)
-        {
-            HttpClient client = new HttpClient { BaseAddress = new Uri(@"https://api.assembla.com") };
-            client.DefaultRequestHeaders.Add("X-Api-Key", settings.ApiKey);
-            client.DefaultRequestHeaders.Add("X-Api-Secret", settings.ApiSecretKey);
-
-            return client;
-        }
-
-        public class HttpClientSettings
-        {
-            public string ApiKey { get; set; }
-            public string ApiSecretKey { get; set; }
         }
     }
 }

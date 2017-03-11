@@ -47,9 +47,9 @@ namespace Tests.Assembla.Connector.Files
             };
             var messageHandler = new FakeHttpMessageHandler(options);
 
-            var httpClient = new HttpClient(messageHandler) { BaseAddress = new Uri("https://api.assembla.com") };
+            var authenticator = new TestAuthenticator(messageHandler);
 
-            var client = new HttpAssemblaClient(httpClient, mockLogger.Object);
+            var client = new HttpAssemblaClient(authenticator, mockLogger.Object);
 
             await client.Files.GetAsync(file.SpaceId, file.Id);
 
@@ -78,9 +78,9 @@ namespace Tests.Assembla.Connector.Files
             };
             var messageHandler = new FakeHttpMessageHandler(options);
 
-            var httpClient = new HttpClient(messageHandler) { BaseAddress = new Uri("https://api.assembla.com") };
+            var authenticator = new TestAuthenticator(messageHandler);
 
-            var client = new HttpAssemblaClient(httpClient, mockLogger.Object);
+            var client = new HttpAssemblaClient(authenticator, mockLogger.Object);
 
             await client.Files.GetAllAsync(file.SpaceId, page: 2, pageSize: 10);
 

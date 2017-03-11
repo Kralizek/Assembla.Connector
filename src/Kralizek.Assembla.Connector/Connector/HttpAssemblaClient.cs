@@ -23,10 +23,17 @@ namespace Kralizek.Assembla.Connector
         private readonly ILogger _logger;
         private static readonly JsonSerializerSettings SerializerSettings = new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore, DateFormatHandling = DateFormatHandling.IsoDateFormat };
 
-        public HttpAssemblaClient(HttpClient client, ILogger<HttpAssemblaClient> logger)
+        public HttpAssemblaClient(AssemblaAuthenticator authenticator, ILogger<HttpAssemblaClient> logger)
         {
-            _client = client ?? throw new ArgumentNullException(nameof(client));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            if (authenticator == null) throw new ArgumentNullException(nameof(authenticator));
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
+            _logger = logger;
+            _client = CreateClient(authenticator);
+        }
+
+        private static HttpClient CreateClient(AssemblaAuthenticator authenticator)
+        {
+            return new HttpClient(authenticator) {BaseAddress = authenticator.ServiceUri};
         }
 
         public ISpaceConnector Spaces => this;
