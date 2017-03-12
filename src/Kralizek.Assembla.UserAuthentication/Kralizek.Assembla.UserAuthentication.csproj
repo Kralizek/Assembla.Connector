@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard1.3;net45</TargetFrameworks>
     <RootNamespace>Kralizek.Assembla</RootNamespace>
-    <PackageId>Kralizek.Assembla.Connector.SecretKey</PackageId>
+    <PackageId>Kralizek.Assembla.UserAuthentication</PackageId>
     <Authors>Renato Golia</Authors>
     <Description>A .NET Standard wrapper for Assembla REST API.</Description>
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>

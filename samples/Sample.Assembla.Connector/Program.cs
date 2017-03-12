@@ -30,7 +30,7 @@ namespace Sample.Assembla.Connector
             services.AddLogging();
             services.AddOptions();
 
-            services.AddAssemblaWithSecretKey(configuration.GetSection("Assembla"));
+            services.AddAssemblaWithUserAuthentication(configuration.GetSection("Assembla"));
 
             services
                 .AddTransient<ISample, SpacesSimpleSample>()

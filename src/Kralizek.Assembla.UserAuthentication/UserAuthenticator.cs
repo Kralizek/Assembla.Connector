@@ -8,18 +8,19 @@ using Microsoft.Extensions.Options;
 
 namespace Kralizek.Assembla
 {
-    public class SecretKeyAuthenticator : AssemblaAuthenticator
+    public class UserAuthenticator : AssemblaAuthenticator
     {
         private readonly AssemblaAuthenticatorOptions _options;
 
-        public SecretKeyAuthenticator(IOptions<AssemblaAuthenticatorOptions> options)
+        public UserAuthenticator(IOptions<AssemblaAuthenticatorOptions> options) : this(options.Value) { }
+
+        private UserAuthenticator(AssemblaAuthenticatorOptions options)
         {
             if (options == null)
             {
                 throw new ArgumentNullException(nameof(options));
             }
-
-            _options = options.Value;
+            _options = options;
         }
 
         public override Uri ServiceUri => _options.ServiceUri;
@@ -30,6 +31,16 @@ namespace Kralizek.Assembla
             request.Headers.Add("X-Api-Secret", _options.ApiSecretKey);
 
             return base.SendAsync(request, cancellationToken);
+        }
+
+        public static AssemblaAuthenticator FromUserKeys(string apiKey, string secretKey)
+        {
+            var authenticatorOptions = new AssemblaAuthenticatorOptions
+            {
+                ApiKey = apiKey,
+                ApiSecretKey = secretKey
+            };
+            return new UserAuthenticator(authenticatorOptions);
         }
     }
 

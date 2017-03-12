@@ -9,11 +9,11 @@ namespace Kralizek.Assembla
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddAssemblaWithSecretKey(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection AddAssemblaWithUserAuthentication(this IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<AssemblaAuthenticatorOptions>(configuration);
 
-            services.AddSingleton<AssemblaAuthenticator, SecretKeyAuthenticator>();
+            services.AddSingleton<AssemblaAuthenticator, UserAuthenticator>();
 
             services.AddSingleton<IAssemblaClient, HttpAssemblaClient>();
 
