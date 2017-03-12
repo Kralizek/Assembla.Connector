@@ -3,9 +3,8 @@ using System.Net.Http;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
-using Kralizek.Assembla;
 
-namespace Tests.Assembla
+namespace Kralizek.Assembla
 {
     public class TestAuthenticator : AssemblaAuthenticator
     {
