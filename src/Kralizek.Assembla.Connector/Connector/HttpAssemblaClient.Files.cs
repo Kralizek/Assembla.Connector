@@ -35,7 +35,7 @@ namespace Kralizek.Assembla.Connector
 
             var documents = await GetJsonAsync<File[]>($"/v1/spaces/{spaceIdOrWikiName}/documents", queryParameters).ConfigureAwait(false);
 
-            return documents;
+            return documents ?? new File[0];
         }
 
         async Task<File> IFileConnector.GetAsync(string spaceIdOrWikiName, string documentId)

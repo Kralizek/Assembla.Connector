@@ -38,7 +38,7 @@ namespace Kralizek.Assembla.Connector
 
             var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/all", queryParameters).ConfigureAwait(false);
 
-            return milestones;
+            return milestones ?? new Milestone[0];
         }
 
         async Task<IReadOnlyList<Milestone>> IMilestoneConnector.GetUpcomingAsync(string spaceIdOrWikiName, int? page, int? pageSize, SortOrder? sort)
@@ -52,7 +52,7 @@ namespace Kralizek.Assembla.Connector
 
             var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/upcoming", queryParameters).ConfigureAwait(false);
 
-            return milestones;
+            return milestones ?? new Milestone[0];
         }
 
         async Task<IReadOnlyList<Milestone>> IMilestoneConnector.GetCompletedAsync(string spaceIdOrWikiName, int? page, int? pageSize, SortOrder? sort)
@@ -66,7 +66,7 @@ namespace Kralizek.Assembla.Connector
 
             var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/completed", queryParameters).ConfigureAwait(false);
 
-            return milestones;
+            return milestones ?? new Milestone[0];
         }
 
         async Task<IReadOnlyList<Milestone>> IMilestoneConnector.GetReleaseNotesAsync(string spaceIdOrWikiName, int? page, int? pageSize, SortOrder? sort)
@@ -80,7 +80,7 @@ namespace Kralizek.Assembla.Connector
 
             var milestones = await GetJsonAsync<Milestone[]>($"/v1/spaces/{spaceIdOrWikiName}/milestones/release_notes", queryParameters).ConfigureAwait(false);
 
-            return milestones;
+            return milestones ?? new Milestone[0];
         }
 
         async Task<Milestone> IMilestoneConnector.GetAsync(string spaceIdOrWikiName, string milestoneId)

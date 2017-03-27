@@ -59,7 +59,7 @@ namespace Kralizek.Assembla.Connector
 
             var tickets = await GetJsonAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
-            return tickets;
+            return tickets ?? new Ticket[0];
         }
 
         async Task<IReadOnlyList<Ticket>> ITicketConnector.GetCurrentUserActiveAsync(string spaceIdOrWikiName)
@@ -73,7 +73,7 @@ namespace Kralizek.Assembla.Connector
 
             var tickets = await GetJsonAsync<Ticket[]>(url).ConfigureAwait(false);
 
-            return tickets;
+            return tickets ?? new Ticket[0];
         }
 
         async Task<IReadOnlyList<Ticket>> ITicketConnector.GetCurrentUserFollowedAsync(string spaceIdOrWikiName)
@@ -87,7 +87,7 @@ namespace Kralizek.Assembla.Connector
 
             var tickets = await GetJsonAsync<Ticket[]>(url).ConfigureAwait(false);
 
-            return tickets;
+            return tickets ?? new Ticket[0];
         }
 
         async Task<IReadOnlyList<Ticket>> ITicketConnector.GetInMilestoneAsync(string spaceIdOrWikiName, string milestoneId, int? page, int? pageSize, TicketSortExpression? sortExpression, SortOrder? sort, TicketStatusFilter? ticketStatusFilter)
@@ -107,7 +107,7 @@ namespace Kralizek.Assembla.Connector
 
             var tickets = await GetJsonAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
-            return tickets;
+            return tickets ?? new Ticket[0];
         }
 
         async Task<IReadOnlyList<Ticket>> ITicketConnector.GetInNoMilestoneAsync(string spaceIdOrWikiName, int? page, int? pageSize)
@@ -123,7 +123,7 @@ namespace Kralizek.Assembla.Connector
 
             var tickets = await GetJsonAsync<Ticket[]>(url, queryParameters).ConfigureAwait(false);
 
-            return tickets;
+            return tickets ?? new Ticket[0];
         }
 
         async Task<IReadOnlyList<CustomReport>> ITicketConnector.GetAllCustomReportAsync(string spaceIdOrWikiName)
@@ -239,7 +239,7 @@ namespace Kralizek.Assembla.Connector
 
             var attachments = await GetJsonAsync<File[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/attachments").ConfigureAwait(false);
 
-            return attachments;
+            return attachments ?? new File[0];
         }
 
         async Task<IReadOnlyList<Tag>> ITicketConnector.GetTicketTagsAsync(string spaceIdOrWikiName, int ticketNumber)
@@ -255,7 +255,7 @@ namespace Kralizek.Assembla.Connector
 
             var tags = await GetJsonAsync<Tag[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/tags").ConfigureAwait(false);
 
-            return tags;
+            return tags ?? new Tag[0];
         }
 
         async Task<IReadOnlyList<Ticket>> ITicketConnector.GetByTagAsync(string spaceIdOrWikiName, int tagId, int? page, int? pageSize)
@@ -273,7 +273,7 @@ namespace Kralizek.Assembla.Connector
 
             var tickets = await GetJsonAsync<Ticket[]>($"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}/tickets", queryParameters).ConfigureAwait(false);
 
-            return tickets;
+            return tickets ?? new Ticket[0];
         }
 
         ICustomFieldConnector ITicketConnector.CustomFields => this;
@@ -300,7 +300,7 @@ namespace Kralizek.Assembla.Connector
 
             var associations = await GetJsonAsync<TicketAssociation[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_associations").ConfigureAwait(false);
 
-            return associations;
+            return associations ?? new TicketAssociation[0];
         }
 
         async Task<TicketAssociation> ITicketAssociationConnector.GetAsync(string spaceIdOrWikiName, int ticketNumber, string associationId)
@@ -395,7 +395,7 @@ namespace Kralizek.Assembla.Connector
 
             var comments = await GetJsonAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
 
-            return comments;
+            return comments ?? new Comment[0];
         }
 
         async Task<Comment> ITicketCommentConnector.GetAsync(string spaceIdOrWikiName, int ticketNumber, int commentId)
@@ -456,7 +456,7 @@ namespace Kralizek.Assembla.Connector
 
             var statuses = await GetJsonAsync<TicketStatus[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/statuses").ConfigureAwait(false);
 
-            return statuses;
+            return statuses ?? new TicketStatus[0];
         }
 
         async Task<TicketStatus> ITicketStatusConnector.GetAsync(string spaceIdOrWikiName, string statusId)
@@ -535,7 +535,7 @@ namespace Kralizek.Assembla.Connector
 
             var fields = await GetJsonAsync<CustomField[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/custom_fields").ConfigureAwait(false);
 
-            return fields;
+            return fields ?? new CustomField[0];
         }
 
         async Task<CustomField> ICustomFieldConnector.GetAsync(string spaceIdOrWikiName, string customFieldId)

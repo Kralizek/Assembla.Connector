@@ -89,7 +89,7 @@ namespace Kralizek.Assembla.Connector
 
             var tools = await GetJsonAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools").ConfigureAwait(false);
 
-            return tools;
+            return tools ?? new Tool[0];
         }
 
         async Task<IReadOnlyList<Tool>> IToolConnector.GetAllRepoInSpaceAsync(string spaceIdOrWikiName)
@@ -101,7 +101,7 @@ namespace Kralizek.Assembla.Connector
 
             var tools = await GetJsonAsync<Tool[]>($"/v1/spaces/{spaceIdOrWikiName}/space_tools/repo").ConfigureAwait(false);
 
-            return tools;
+            return tools ?? new Tool[0];
         }
 
         async Task<Tool> IToolConnector.GetAsync(string spaceIdOrWikiName, string toolIdOrName)

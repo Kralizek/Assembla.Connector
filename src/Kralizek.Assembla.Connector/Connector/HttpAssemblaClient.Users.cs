@@ -45,7 +45,7 @@ namespace Kralizek.Assembla.Connector
             }
             var users = await GetJsonAsync<User[]>($"/v1/spaces/{spaceId}/users").ConfigureAwait(false);
 
-            return users;
+            return users ?? new User[0];
         }
     }
 }

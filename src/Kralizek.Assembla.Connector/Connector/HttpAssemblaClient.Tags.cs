@@ -18,7 +18,7 @@ namespace Kralizek.Assembla.Connector
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
-            return tags;
+            return tags ?? new Tag[0];
         }
 
         async Task<IReadOnlyList<Tag>> ITagConnector.GetActiveAsync(string spaceIdOrWikiName)
@@ -32,7 +32,7 @@ namespace Kralizek.Assembla.Connector
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
-            return tags;
+            return tags ?? new Tag[0];
         }
 
         async Task<IReadOnlyList<Tag>> ITagConnector.GetProposedAsync(string spaceIdOrWikiName)
@@ -46,7 +46,7 @@ namespace Kralizek.Assembla.Connector
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
-            return tags;
+            return tags ?? new Tag[0];
         }
 
         async Task<IReadOnlyList<Tag>> ITagConnector.GetHiddenAsync(string spaceIdOrWikiName)
@@ -60,7 +60,7 @@ namespace Kralizek.Assembla.Connector
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
-            return tags;
+            return tags ?? new Tag[0];
         }
 
         async Task<Tag> ITagConnector.GetAsync(string spaceIdOrWikiName, int tagId)
