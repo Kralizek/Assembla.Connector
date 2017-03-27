@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 
 namespace Kralizek.Assembla.Connector.Users
 {
+    [JsonConverter(typeof(InstantMessagingAccountJsonConverter))]
     public class InstantMessagingAccount
     {
         [JsonProperty("type")]
