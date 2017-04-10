@@ -14,7 +14,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
             
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
@@ -28,7 +28,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/active";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/active";
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
@@ -42,7 +42,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/proposed";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/proposed";
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
@@ -56,7 +56,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/hidden";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/hidden";
 
             var tags = await GetJsonAsync<Tag[]>(uri).ConfigureAwait(false);
 
@@ -70,7 +70,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}";
 
             var tag = await GetJsonAsync<Tag>(uri).ConfigureAwait(false);
 
@@ -88,7 +88,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(tag));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags";
 
             var newTag = await PostAsync<TagRequest, Tag>(uri, new TagRequest(tag)).ConfigureAwait(false);
 
@@ -106,7 +106,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(tag));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tag.Id}";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tag.Id}";
 
             await PutAsync(uri, new TagRequest(tag)).ConfigureAwait(false);
         }
@@ -118,7 +118,7 @@ namespace Kralizek.Assembla.Connector
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            string uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}";
+            var uri = $"/v1/spaces/{spaceIdOrWikiName}/tags/{tagId}";
 
             await _client.DeleteAsync(uri).ConfigureAwait(false);
         }

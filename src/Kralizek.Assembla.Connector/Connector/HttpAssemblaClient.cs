@@ -26,8 +26,7 @@ namespace Kralizek.Assembla.Connector
         public HttpAssemblaClient(AssemblaAuthenticator authenticator, ILogger<HttpAssemblaClient> logger)
         {
             if (authenticator == null) throw new ArgumentNullException(nameof(authenticator));
-            if (logger == null) throw new ArgumentNullException(nameof(logger));
-            _logger = logger;
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _client = CreateClient(authenticator);
         }
 
@@ -52,7 +51,7 @@ namespace Kralizek.Assembla.Connector
 
         private string ComposeUrl(string url, IReadOnlyDictionary<string, string> query = null)
         {
-            string queryPart = string.Empty;
+            var queryPart = string.Empty;
 
             if (query != null)
             {
@@ -64,7 +63,7 @@ namespace Kralizek.Assembla.Connector
 
         private async Task DeleteAsync(string url, IReadOnlyDictionary<string, string> query = null)
         {
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
 
             using (var request = new HttpRequestMessage(HttpMethod.Delete, requestUrl))
             {
@@ -81,7 +80,7 @@ namespace Kralizek.Assembla.Connector
 
         private async Task<TResult> GetJsonAsync<TResult>(string url, IReadOnlyDictionary<string, string> query = null)
         {
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
 
             using (var request = new HttpRequestMessage(HttpMethod.Get, requestUrl))
             {
@@ -92,9 +91,9 @@ namespace Kralizek.Assembla.Connector
 
                     response.EnsureSuccessStatusCode();
 
-                    string content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync();
 
-                    TResult result = JsonConvert.DeserializeObject<TResult>(content);
+                    var result = JsonConvert.DeserializeObject<TResult>(content);
 
                     return result;
                 }
@@ -103,7 +102,7 @@ namespace Kralizek.Assembla.Connector
 
         private async Task<byte[]> GetRawAsync(string url, IReadOnlyDictionary<string, string> query = null)
         {
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
 
             _logger.LogDebug($"GET: {requestUrl}");
 
@@ -126,10 +125,10 @@ namespace Kralizek.Assembla.Connector
 
         private async Task<TResult> PostAsync<TContent, TResult>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
         {
-            string json = JsonConvert.SerializeObject(content, SerializerSettings);
+            var json = JsonConvert.SerializeObject(content, SerializerSettings);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
             
             using (var request = new HttpRequestMessage(HttpMethod.Post, requestUrl) { Content = httpContent })
             {
@@ -141,9 +140,9 @@ namespace Kralizek.Assembla.Connector
 
                     response.EnsureSuccessStatusCode();
 
-                    string incomingContent = await response.Content.ReadAsStringAsync();
+                    var incomingContent = await response.Content.ReadAsStringAsync();
 
-                    TResult result = JsonConvert.DeserializeObject<TResult>(incomingContent);
+                    var result = JsonConvert.DeserializeObject<TResult>(incomingContent);
 
                     return result;
                 }
@@ -152,7 +151,7 @@ namespace Kralizek.Assembla.Connector
 
         private async Task<TResult> PostAsync<TResult>(string url, HttpContent content = null, IReadOnlyDictionary<string, string> query = null)
         {
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
 
             using (var request = new HttpRequestMessage(HttpMethod.Post, requestUrl) {Content = content})
             {
@@ -164,9 +163,9 @@ namespace Kralizek.Assembla.Connector
 
                     response.EnsureSuccessStatusCode();
 
-                    string incomingContent = await response.Content.ReadAsStringAsync();
+                    var incomingContent = await response.Content.ReadAsStringAsync();
 
-                    TResult result = JsonConvert.DeserializeObject<TResult>(incomingContent);
+                    var result = JsonConvert.DeserializeObject<TResult>(incomingContent);
 
                     return result;
                 }
@@ -175,7 +174,7 @@ namespace Kralizek.Assembla.Connector
 
         private async Task PutAsync(string url, HttpContent content, IReadOnlyDictionary<string, string> query = null)
         {
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
 
             using (var request = new HttpRequestMessage(HttpMethod.Put, requestUrl) {Content = content})
             {
@@ -190,10 +189,10 @@ namespace Kralizek.Assembla.Connector
 
         private async Task PutAsync<TContent>(string url, TContent content, IReadOnlyDictionary<string, string> query = null)
         {
-            string json = JsonConvert.SerializeObject(content, SerializerSettings);
+            var json = JsonConvert.SerializeObject(content, SerializerSettings);
             var httpContent = new StringContent(json, Encoding.UTF8, "application/json");
 
-            string requestUrl = ComposeUrl(url, query);
+            var requestUrl = ComposeUrl(url, query);
             
             using (var request = new HttpRequestMessage(HttpMethod.Put, requestUrl) { Content = httpContent })
             {
@@ -237,9 +236,9 @@ namespace Kralizek.Assembla.Connector
             {
                 try
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync();
 
-                    string errorMessage = (string)JObject.Parse(responseContent)["error"];
+                    var errorMessage = (string)JObject.Parse(responseContent)["error"];
 
                     var state = new
                     {

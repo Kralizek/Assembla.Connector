@@ -18,7 +18,7 @@ namespace Kralizek.Assembla.Connector.Spaces
                 throw new InvalidOperationException("The value can't be converted");
             }
 
-            string value = (string)reader.Value;
+            var value = (string)reader.Value;
 
             if (string.IsNullOrEmpty(value))
             {

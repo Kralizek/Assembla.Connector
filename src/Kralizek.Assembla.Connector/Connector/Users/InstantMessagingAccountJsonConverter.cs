@@ -13,7 +13,7 @@ namespace Kralizek.Assembla.Connector.Users
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            JObject jObject = JObject.Load(reader);
+            var jObject = JObject.Load(reader);
 
             if (string.IsNullOrEmpty(jObject["type"].Value<string>()))
                 return null;
