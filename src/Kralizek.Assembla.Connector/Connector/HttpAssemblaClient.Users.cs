@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kralizek.Assembla.Connector.Users;
+using Kralizek.Assembla.Connector.Users.Roles;
 
 namespace Kralizek.Assembla.Connector
 {
@@ -46,6 +47,87 @@ namespace Kralizek.Assembla.Connector
             var users = await GetJsonAsync<User[]>($"/v1/spaces/{spaceId}/users").ConfigureAwait(false);
 
             return users ?? new User[0];
+        }
+
+        IUserRoleConnector IUserConnector.UserRoles => this;
+    }
+
+    public partial class HttpAssemblaClient : IUserRoleConnector
+    {
+        async Task<IReadOnlyList<UserRole>> IUserRoleConnector.GetAsync(string spaceIdOrWikiName)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+
+            var roles = await GetJsonAsync<UserRole[]>($"/v1/spaces/{spaceIdOrWikiName}/user_roles").ConfigureAwait(false);
+
+            return roles ?? new UserRole[0];
+        }
+
+        async Task<UserRole> IUserRoleConnector.GetAsync(string spaceIdOrWikiName, int userRoleId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (userRoleId == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(userRoleId));
+            }
+
+            var role = await GetJsonAsync<UserRole>($"/v1/spaces/{spaceIdOrWikiName}/user_roles/{userRoleId}").ConfigureAwait(false);
+
+            return role;
+        }
+
+        async Task<UserRole> IUserRoleConnector.CreateAsync(string spaceIdOrWikiName, UserRole userRole)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (userRole == null)
+            {
+                throw new ArgumentNullException(nameof(userRole));
+            }
+
+            var createdUserRole = await PostAsync<UserRoleRequest, UserRole>($"/v1/spaces/{spaceIdOrWikiName}/user_roles", new UserRoleRequest(userRole)).ConfigureAwait(false);
+
+            return createdUserRole;
+        }
+
+        async Task IUserRoleConnector.UpdateAsync(string spaceIdOrWikiName, UserRole userRole)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (userRole == null)
+            {
+                throw new ArgumentNullException(nameof(userRole));
+            }
+            if (userRole.Id == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(userRole.Id));
+            }
+
+            await PutAsync($"/v1/spaces/{spaceIdOrWikiName}/user_roles/{userRole.Id}", new UserRoleRequest(userRole)).ConfigureAwait(false);
+        }
+
+        async Task IUserRoleConnector.DeleteAsync(string spaceIdOrWikiName, int userRoleId)
+        {
+            if (spaceIdOrWikiName == null)
+            {
+                throw new ArgumentNullException(nameof(spaceIdOrWikiName));
+            }
+            if (userRoleId == 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(userRoleId));
+            }
+
+            await DeleteAsync($"/v1/spaces/{spaceIdOrWikiName}/user_roles/{userRoleId}").ConfigureAwait(false);
         }
     }
 }

@@ -20,8 +20,9 @@ The remaining scenarios will be supported by extensions packages.
 Here is a list of sections of the exposed functionalities.
 
 #### Implemented
-- [x] Users
 - [x] Spaces
+- [x] Users
+- [x] User roles
 - [x] Tools
 - [x] Tickets
 - [x] Tags
@@ -31,7 +32,6 @@ Here is a list of sections of the exposed functionalities.
 #### Next in line
 - [ ] Stream
 - [ ] Mentions
-- [ ] User roles
 - [ ] Wiki
 - [ ] SSH keys
 

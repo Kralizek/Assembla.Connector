@@ -69,7 +69,7 @@ namespace Kralizek.Assembla.Connector
             {
                 await LogRequest(request);
 
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
 
@@ -85,13 +85,13 @@ namespace Kralizek.Assembla.Connector
             using (var request = new HttpRequestMessage(HttpMethod.Get, requestUrl))
             {
                 await LogRequest(request);
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
 
                     response.EnsureSuccessStatusCode();
 
-                    var content = await response.Content.ReadAsStringAsync();
+                    var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     var result = JsonConvert.DeserializeObject<TResult>(content);
 
@@ -110,7 +110,7 @@ namespace Kralizek.Assembla.Connector
             {
                 await LogRequest(request);
 
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
 
@@ -134,13 +134,13 @@ namespace Kralizek.Assembla.Connector
             {
                 await LogRequest(request, includeContent: true);
 
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
 
                     response.EnsureSuccessStatusCode();
 
-                    var incomingContent = await response.Content.ReadAsStringAsync();
+                    var incomingContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     var result = JsonConvert.DeserializeObject<TResult>(incomingContent);
 
@@ -157,13 +157,13 @@ namespace Kralizek.Assembla.Connector
             {
                 await LogRequest(request);
 
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
 
                     response.EnsureSuccessStatusCode();
 
-                    var incomingContent = await response.Content.ReadAsStringAsync();
+                    var incomingContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     var result = JsonConvert.DeserializeObject<TResult>(incomingContent);
 
@@ -180,7 +180,7 @@ namespace Kralizek.Assembla.Connector
             {
                 await LogRequest(request);
 
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
                 }
@@ -198,7 +198,7 @@ namespace Kralizek.Assembla.Connector
             {
                 await LogRequest(request, includeContent: true);
 
-                using (var response = await _client.SendAsync(request))
+                using (var response = await _client.SendAsync(request).ConfigureAwait(false))
                 {
                     await LogResponse(response);
                 }
@@ -236,7 +236,7 @@ namespace Kralizek.Assembla.Connector
             {
                 try
                 {
-                    var responseContent = await response.Content.ReadAsStringAsync();
+                    var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
                     var errorMessage = (string)JObject.Parse(responseContent)["error"];
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Kralizek.Assembla.Connector.Users.Roles;
 
 namespace Kralizek.Assembla.Connector.Users
 {
@@ -12,5 +13,7 @@ namespace Kralizek.Assembla.Connector.Users
         Task<byte[]> GetPictyreAsync(string userIdOrLogin);
 
         Task<IReadOnlyList<User>> GetInSpaceAsync(string spaceId);
+
+        IUserRoleConnector UserRoles { get; }
     }
 }

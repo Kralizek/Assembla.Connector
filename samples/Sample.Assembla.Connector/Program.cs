@@ -33,19 +33,20 @@ namespace Sample.Assembla.Connector
             services.AddAssemblaWithUserAuthentication(configuration.GetSection("Assembla"));
 
             services
-                .AddTransient<ISample, SpacesSimpleSample>()
-                .AddTransient<ISample, ToolSample>()
-                .AddTransient<ISample, SpacesCopySample>()
-                .AddTransient<ISample, TagsSample>()
-                .AddTransient<ISample, TicketSample>()
-                .AddTransient<ISample, TicketListSample>()
-                .AddTransient<ISample, CustomFieldSample>()
-                .AddTransient<ISample, MilestoneSample>()
-                .AddTransient<ISample, TicketStatusSample>()
-                .AddTransient<ISample, TicketCommentSample>()
-                .AddTransient<ISample, TicketAssociationSample>()
-                .AddTransient<ISample, FileSample>()
-                .AddTransient<ISample, UserSample>()
+                //.AddTransient<ISample, SpacesSimpleSample>()
+                //.AddTransient<ISample, ToolSample>()
+                //.AddTransient<ISample, SpacesCopySample>()
+                //.AddTransient<ISample, TagsSample>()
+                //.AddTransient<ISample, TicketSample>()
+                //.AddTransient<ISample, TicketListSample>()
+                //.AddTransient<ISample, CustomFieldSample>()
+                //.AddTransient<ISample, MilestoneSample>()
+                //.AddTransient<ISample, TicketStatusSample>()
+                //.AddTransient<ISample, TicketCommentSample>()
+                //.AddTransient<ISample, TicketAssociationSample>()
+                //.AddTransient<ISample, FileSample>()
+                //.AddTransient<ISample, UserSample>()
+                .AddTransient<ISample, UserRoleSample>()
             ;
 
             var serviceProvider = services.BuildServiceProvider();
