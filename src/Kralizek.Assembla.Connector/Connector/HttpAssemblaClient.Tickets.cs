@@ -386,14 +386,16 @@ namespace Kralizek.Assembla.Connector
 
     public partial class HttpAssemblaClient : ITicketCommentConnector
     {
-        async Task<IReadOnlyList<Comment>> ITicketCommentConnector.GetAllInTicketAsync(string spaceIdOrWikiName, int ticketNumber)
+        async Task<IReadOnlyList<Comment>> ITicketCommentConnector.GetAllInTicketAsync(string spaceIdOrWikiName, int ticketNumber, int? page, int? pageSize)
         {
             if (spaceIdOrWikiName == null)
             {
                 throw new ArgumentNullException(nameof(spaceIdOrWikiName));
             }
 
-            var comments = await GetJsonAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments").ConfigureAwait(false);
+            var queryParameters = GetTicketQueryParameters(page: page, pageSize: pageSize);
+
+            var comments = await GetJsonAsync<Comment[]>($"/v1/spaces/{spaceIdOrWikiName}/tickets/{ticketNumber}/ticket_comments", queryParameters).ConfigureAwait(false);
 
             return comments ?? new Comment[0];
         }
