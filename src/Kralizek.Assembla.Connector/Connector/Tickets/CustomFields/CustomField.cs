@@ -1,4 +1,5 @@
 ﻿using System;
+using Kralizek.Assembla.Connector.Spaces;
 using Newtonsoft.Json;
 
 namespace Kralizek.Assembla.Connector.Tickets.CustomFields
@@ -30,6 +31,7 @@ namespace Kralizek.Assembla.Connector.Tickets.CustomFields
         public string DefaultValue { get; set; }
 
         [JsonProperty("list_options")]
+        [JsonConverter(typeof(TabListJsonConverter))]
         public string[] ListOptions { get; set; }
 
         [JsonProperty("created_at")]
