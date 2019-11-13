@@ -1,41 +1,42 @@
 ﻿using Kralizek.Assembla.Connector.Files;
+using NUnit.Framework;
 using Shouldly;
-using Xunit;
 
-namespace Tests.Assembla.Connector.Files
+namespace Tests.Connector.Files
 {
+    [TestFixture]
     public class FileTests
     {
-        [Fact]
-        public void File_IsAttachedToTicket_should_be_TRUE_when_attached_to_Ticket()
+        [Test, CustomAutoData]
+        public void File_IsAttachedToTicket_should_be_TRUE_when_attached_to_Ticket(string fileId)
         {
             File file = new File
             {
-                AttachableId = "1234",
+                AttachableId = fileId,
                 AttachableType = AttachableType.Ticket
             };
 
             file.IsAttachedToTicket().ShouldBe(true);
         }
 
-        [Fact]
-        public void File_IsAttachedToMilestone_should_be_TRUE_when_attached_to_Milestone()
+        [Test, CustomAutoData]
+        public void File_IsAttachedToMilestone_should_be_TRUE_when_attached_to_Milestone(string fileId)
         {
             File file = new File
             {
-                AttachableId = "1234",
+                AttachableId = fileId,
                 AttachableType = AttachableType.Milestone
             };
 
             file.IsAttachedToMilestone().ShouldBe(true);
         }
 
-        [Fact]
-        public void File_IsAttachedToMessage_should_be_TRUE_when_attached_to_Message()
+        [Test, CustomAutoData]
+        public void File_IsAttachedToMessage_should_be_TRUE_when_attached_to_Message(string fileId)
         {
             File file = new File
             {
-                AttachableId = "1234",
+                AttachableId = fileId,
                 AttachableType = AttachableType.Flow
             };
 

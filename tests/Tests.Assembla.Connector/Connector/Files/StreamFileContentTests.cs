@@ -2,17 +2,17 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Kralizek.Assembla.Connector.Files.Content;
+using NUnit.Framework;
 using Shouldly;
-using Xunit;
 
-namespace Tests.Assembla.Connector.Files
+namespace Tests.Connector.Files
 {
+    [TestFixture]
     public class StreamFileContentTests
     {
-        [Fact]
-        public async Task ToContent_returns_valid_content()
+        [Test, CustomAutoData]
+        public async Task ToContent_returns_valid_content(string testContent)
         {
-            const string testContent = "Some Content";
             Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(testContent));
 
             var fileContent = new StreamFileContent(stream);

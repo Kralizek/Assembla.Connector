@@ -10,12 +10,13 @@ using Kralizek.Assembla.Connector.Files;
 using Microsoft.Extensions.Logging;
 using Moq;
 using Newtonsoft.Json;
+using NUnit.Framework;
 using Shouldly;
 using WorldDomination.Net.Http;
-using Xunit;
 
 namespace Tests.Assembla.Connector.Files
 {
+    [TestFixture]
     public class HttpAssemblaClientTests 
     {
         private readonly Mock<ILogger<HttpAssemblaClient>> mockLogger;
@@ -26,7 +27,7 @@ namespace Tests.Assembla.Connector.Files
             JsonConvert.DefaultSettings = () => new JsonSerializerSettings { DefaultValueHandling = DefaultValueHandling.Ignore };
         }
 
-        [Fact]
+        [Test]
         public async Task GetAsync_should_return_the_requested_file()
         {
             var file = new File { Id = "documentId", SpaceId = "spaceIdOrWikiName" };
@@ -36,14 +37,9 @@ namespace Tests.Assembla.Connector.Files
             {
                 new HttpMessageOptions
                 {
-                    RequestUri = "https://api.assembla.com/v1/spaces/spaceIdOrWikiName/documents/documentId",
+                    RequestUri = new Uri("https://api.assembla.com/v1/spaces/spaceIdOrWikiName/documents/documentId"),
                     HttpMethod = HttpMethod.Get,
                     HttpResponseMessage = FakeHttpMessageHandler.GetStringHttpResponseMessage(json)
-                },
-                new HttpMessageOptions
-                {
-                    RequestUri = "*",
-                    HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound)
                 }
             };
             var messageHandler = new FakeHttpMessageHandler(options);
@@ -57,7 +53,7 @@ namespace Tests.Assembla.Connector.Files
             options[0].NumberOfTimesCalled.ShouldBe(1);
         }
 
-        [Fact]
+        [Test]
         public async Task GetAllAsync_should_attach_paging_parameters()
         {
             var file = new File { Id = "documentId", SpaceId = "spaceIdOrWikiName" };
@@ -67,14 +63,9 @@ namespace Tests.Assembla.Connector.Files
 {
                 new HttpMessageOptions
                 {
-                    RequestUri = "https://api.assembla.com/v1/spaces/spaceIdOrWikiName/documents?page=2&per_page=10",
+                    RequestUri = new Uri("https://api.assembla.com/v1/spaces/spaceIdOrWikiName/documents?page=2&per_page=10"),
                     HttpMethod = HttpMethod.Get,
                     HttpResponseMessage = FakeHttpMessageHandler.GetStringHttpResponseMessage(json)
-                },
-                new HttpMessageOptions
-                {
-                    RequestUri = "*",
-                    HttpResponseMessage = new HttpResponseMessage(HttpStatusCode.NotFound)
                 }
             };
             var messageHandler = new FakeHttpMessageHandler(options);
