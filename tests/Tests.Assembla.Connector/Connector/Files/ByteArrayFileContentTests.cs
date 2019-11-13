@@ -1,26 +1,24 @@
 using System.Text;
 using System.Threading.Tasks;
 using Kralizek.Assembla.Connector.Files.Content;
-using Shouldly;
-using Xunit;
+using NUnit.Framework;
 
-namespace Tests.Assembla.Connector.Files
+namespace Tests.Connector.Files
 {
+    [TestFixture]
     public class ByteArrayFileContentTests
     {
-        [Fact]
-        public async Task ToContent_returns_valid_content()
+        [Test, CustomAutoData]
+        public async Task ToContent_returns_valid_content(string testContent)
         {
-            const string testContent = "Some Content";
             var bytes = Encoding.UTF8.GetBytes(testContent);
 
             var fileContent = new ByteArrayFileContent(bytes);
             var httpContent = fileContent.ToContent();
-
-            httpContent.ShouldNotBeNull();
             var actualValue = await httpContent.ReadAsStringAsync();
 
-            actualValue.ShouldBe(testContent);
+            Assert.That(httpContent, Is.Not.Null);
+            Assert.That(actualValue, Is.EqualTo(testContent));
         }
     }
 }

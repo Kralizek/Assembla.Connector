@@ -1,17 +1,15 @@
 using System.Threading.Tasks;
 using Kralizek.Assembla.Connector.Files.Content;
 using Shouldly;
-using Xunit;
+using NUnit.Framework;
 
-namespace Tests.Assembla.Connector.Files
+namespace Tests.Connector.Files
 {
     public class StringFileContentTests
     {
-        [Fact]
-        public async Task ToContent_returns_StringContent()
+        [Test, CustomAutoData]
+        public async Task ToContent_returns_StringContent(string testContent)
         {
-            const string testContent = "Some Content";
-
             var fileContent = new StringFileContent(testContent);
             var httpContent = fileContent.ToContent();
 
@@ -21,10 +19,9 @@ namespace Tests.Assembla.Connector.Files
             actualValue.ShouldBe(testContent);
         }
 
-        [Fact]
-        public void ContentType_is_attached_to_HttpContent()
+        [Test, CustomAutoData]
+        public void ContentType_is_attached_to_HttpContent(string testContent)
         {
-            const string testContent = "Some Content";
             const string testContentType = "test/json";
 
             var fileContent = new StringFileContent(testContent, contentType: testContentType);

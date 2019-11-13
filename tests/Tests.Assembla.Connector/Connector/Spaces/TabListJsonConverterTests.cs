@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
 using Kralizek.Assembla.Connector.Spaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Shouldly;
-using Xunit;
+using NUnit.Framework;
 
-namespace Tests.Assembla.Connector.Spaces
+namespace Tests.Connector.Spaces
 {
+    [TestFixture]
     public class TabListJsonConverterTests
     {
         public class TestType
@@ -18,33 +15,28 @@ namespace Tests.Assembla.Connector.Spaces
             public string[] Tabs { get; set; }
         }
 
-        [Fact]
-        public void String_arrays_can_be_serialized()
+        [Test, CustomAutoData]
+        public void String_arrays_can_be_serialized(TestType testItem)
         {
-            TestType testType = new TestType
-            {
-                Tabs = new[] {"hello", "world"}
-            };
-
-            var json = JsonConvert.SerializeObject(testType);
+            var json = JsonConvert.SerializeObject(testItem);
 
             JObject jObject = JObject.Parse(json);
 
             var values = jObject["Tabs"].Values<string>().ToArray();
 
-            values.ShouldContain(c => c == testType.Tabs[0]);
-            values.ShouldContain(c => c == testType.Tabs[1]);
+            CollectionAssert.AreEquivalent(testItem.Tabs, values);
+
+            Assert.That(values, Is.EquivalentTo(testItem.Tabs));
         }
 
-        [Fact]
-        public void Custom_encoded_string_arrays_can_be_deserialized()
+        [Test, CustomAutoData]
+        public void Custom_encoded_string_arrays_can_be_deserialized(string[] strings)
         {
-            string json = "{\"Tabs\": \"---\\n- hello\\n- world\\n\"}";
+            var json = $"{{\"Tabs\":\"---\\n{string.Join("", strings.Select(s => $"- {s}\\n"))}\"}}";
 
             var newItem = JsonConvert.DeserializeObject<TestType>(json);
 
-            newItem.Tabs.ShouldContain(c => c == "hello");
-            newItem.Tabs.ShouldContain(c => c == "world");
+            Assert.That(newItem.Tabs, Is.EquivalentTo(strings));
         }
     }
 }
