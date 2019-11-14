@@ -163,7 +163,7 @@ Task("ExportReport")
 {
     Information("Executing ReportGenerator to generate HTML report");
     ReportGenerator(state.Paths.DotCoverOutputFileXml, state.Paths.ReportFolder, new ReportGeneratorSettings {
-            ReportTypes = new[]{ReportGeneratorReportType.Html, ReportGeneratorReportType.Xml}
+            ReportTypes = new[]{ReportGeneratorReportType.Xml}
     });
 });
 
