@@ -9,9 +9,9 @@ environment:
 cache:
   - '%LocalAppData%\NuGet\v3-cache'
 
-only_commits:
-  files:
-    - src/
+# only_commits:
+#   files:
+#     - src/
 
 nuget:
   account_feed: false
