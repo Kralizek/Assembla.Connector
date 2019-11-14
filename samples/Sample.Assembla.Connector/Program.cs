@@ -40,13 +40,14 @@ namespace Sample.Assembla.Connector
                 //.AddTransient<ISample, TicketSample>()
                 //.AddTransient<ISample, TicketListSample>()
                 //.AddTransient<ISample, CustomFieldSample>()
+                .AddTransient<ISample, CustomFieldListSample>()
                 //.AddTransient<ISample, MilestoneSample>()
                 //.AddTransient<ISample, TicketStatusSample>()
                 //.AddTransient<ISample, TicketCommentSample>()
                 //.AddTransient<ISample, TicketAssociationSample>()
                 //.AddTransient<ISample, FileSample>()
                 //.AddTransient<ISample, UserSample>()
-                .AddTransient<ISample, UserRoleSample>()
+                //.AddTransient<ISample, UserRoleSample>()
             ;
 
             var serviceProvider = services.BuildServiceProvider();

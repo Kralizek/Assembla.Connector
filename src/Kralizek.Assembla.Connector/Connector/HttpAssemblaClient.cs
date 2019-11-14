@@ -238,15 +238,13 @@ namespace Kralizek.Assembla.Connector
                 {
                     var responseContent = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
 
-                    var errorMessage = (string)JObject.Parse(responseContent)["error"];
-
                     var state = new
                     {
                         method = response.RequestMessage.Method.Method.ToUpper(),
                         requestUri = response.RequestMessage.RequestUri,
                         status = response.StatusCode,
                         reasonPhrase = response.ReasonPhrase,
-                        errorMessage
+                        errorMessage = responseContent
                     };
 
                     _logger.LogError(eventId, state, s => $"{s.method}: {s.requestUri.PathAndQuery} {s.status:D} '{s.reasonPhrase}' '{s.errorMessage}'");

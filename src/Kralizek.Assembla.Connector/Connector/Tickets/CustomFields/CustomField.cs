@@ -1,5 +1,4 @@
 ﻿using System;
-using Kralizek.Assembla.Connector.Spaces;
 using Newtonsoft.Json;
 
 namespace Kralizek.Assembla.Connector.Tickets.CustomFields
@@ -31,7 +30,7 @@ namespace Kralizek.Assembla.Connector.Tickets.CustomFields
         public string DefaultValue { get; set; }
 
         [JsonProperty("list_options")]
-        [JsonConverter(typeof(TabListJsonConverter))]
+        [JsonConverter(typeof(ListStringJsonConverter))]
         public string[] ListOptions { get; set; }
 
         [JsonProperty("created_at")]
@@ -39,5 +38,8 @@ namespace Kralizek.Assembla.Connector.Tickets.CustomFields
 
         [JsonProperty("updated_at")]
         public DateTimeOffset UpdatedAt { get; set; }
+
+        [JsonProperty("without_default_on_form")]
+        public bool DefaultValueNotRequired => string.IsNullOrEmpty(DefaultValue);
     }
 }
