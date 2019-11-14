@@ -1,0 +1,7 @@
+next-version: 0.5
+mode: ContinuousDeployment
+continuous-delivery-fallback-tag: preview
+
+branches:
+  develop:
+    tag: vnext
