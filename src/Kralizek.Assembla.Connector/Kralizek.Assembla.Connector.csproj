@@ -8,7 +8,7 @@
     <NetStandardImplicitPackageVersion Condition=" '$(TargetFramework)' == 'netstandard1.3' ">1.6.0</NetStandardImplicitPackageVersion>
     <PackageProjectUrl>https://github.com/Kralizek/Assembla.Connector</PackageProjectUrl>
     <PackageLicenseUrl>https://raw.githubusercontent.com/Kralizek/Assembla.Connector/master/LICENSE</PackageLicenseUrl>
-    <Version>0.4.1</Version>
+    <Version>0.4.2</Version>
     <PackageTags>assembla;dotnet-core;dotnet-standard;rest-api;netstandard</PackageTags>
   </PropertyGroup>
   <ItemGroup>
