@@ -24,8 +24,17 @@ install:
 build_script:
   - cmd: dotnet cake --target=Full
 
+test: off
+
 artifacts:
   - path: outputs\*.nupkg
     name: packages
   - path: outputs\*.snupkg
     name: symbols
+
+deploy:
+  - provider: Environment
+    name: NuGet
+    on:
+      branch: master
+      appveyor_repo_tag: true
