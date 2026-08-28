@@ -1,3 +1,6 @@
+> [!WARNING]
+> This project is no longer maintained. Existing NuGet packages remain available for existing consumers, but no new releases are planned. This repository is being archived and kept read-only.
+
 This repository contains a series of tools to easily integrate the REST API offered by [Assembla](https://www.assembla.com/).
 The first tool being worked on is a REST API wrapper that will act as foundation for future tools.
 
